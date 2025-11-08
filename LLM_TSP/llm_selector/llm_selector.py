@@ -168,7 +168,13 @@ def handle_valid_subproblem_selection(args, removed_nodes, coordinates_list, sol
                                             llm_parser, num_subregion,
                                             current_route_edges, X_MIN, X_MAX, Y_MIN, Y_MAX, GRID_RES, traj_lock,
                                             task_label):
-
+    """
+    - If the rectangle is too small (<5 nodes), it falls back to the RandomSelector to redraw a larger region over the entire instance.
+    - If the rectangle is too large (>max), it “zooms in”: either asks the LLM again but confined to the oversized region (with higher resolution) or, if using the random selector, samples a
+        smaller subrectangle inside the oversized one.
+    - After each redraw, it recomputes removed_nodes/route_segments until the count is acceptable, then returns the sanitized route_segments, removed_nodes, and metadata (coordinates, record id,
+        model name).
+    """
     record_id = None
     model_name = None
 

@@ -64,49 +64,52 @@ def _reap_finished(active_processes: Dict[mp.Process, "Subproblem"]):
             active_processes.pop(proc, None)
 
 def dynamic_worker_manager(config):
-      logger = logging.getLogger(__name__)
-      active_processes: Dict[mp.Process, "Subproblem"] = {}
-      try:
-          while time.time() < config.deadline:
-              _reap_finished(active_processes)
-              if len(active_processes) >= 1:
-                  time.sleep(0.1)
-                  continue
+    _configure_logging('worker')
+    logger = logging.getLogger()
+    # logger = logging.getLogger(__name__)
+    active_processes: Dict[mp.Process, "Subproblem"] = {}
+    try:
+        while time.time() < config.deadline:
+            _reap_finished(active_processes)
+            if len(active_processes) >= 1:
+                time.sleep(0.1)
+                continue
 
-              with config.sol_lock, config.obj_lock:
-                  current_route = list(config.global_sol)
-                  current_obj = config.global_obj.value
+            with config.sol_lock, config.obj_lock:
+                current_route = list(config.global_sol)
+                current_obj = config.global_obj.value
 
-              subproblem = sample_independent_subproblem(
-                  config=config,
-                  active_subproblems=list(active_processes.values()),
-                  gain_subproblem_queue=config.gain_subproblem_queue,
-                  subproblem_re_queue=config.pending_re_subproblem_queue,
-                  subproblem_ft_queue=config.pending_ft_subproblem_queue,
-                  traj_lock=config.traj_lock,
-                  current_route=current_route,
-              )
+            subproblem = sample_independent_subproblem(
+                config=config,
+                active_subproblems=list(active_processes.values()),
+                gain_subproblem_queue=config.gain_subproblem_queue,
+                subproblem_re_queue=config.pending_re_subproblem_queue,
+                subproblem_ft_queue=config.pending_ft_subproblem_queue,
+                traj_lock=config.traj_lock,
+                current_route=current_route,
+            )
 
-              if subproblem is None:
-                  time.sleep(0.2)
-                  continue
+            if subproblem is None:
+                time.sleep(0.2)
+                continue
 
-              subproblem.solution_version = current_obj
-              proc = mp.Process(
-                  target=subproblem_solver,
-                  args=(subproblem, config),
-                  name=f"SubTSP‑{subproblem.solution_version}",
-              )
-              proc.start()
-              active_processes[proc] = subproblem
-              logger.debug("Launched %s (alive=%d)", subproblem.solution_version, len(active_processes))
-      finally:
-          for proc in list(active_processes.keys()):
-              proc.join()
-          active_processes.clear()
-          logger.info("Manager shut‑down complete – final objective = %s", config.global_obj.value)
+            subproblem.solution_version = current_obj
+            proc = mp.Process(
+                target=subproblem_solver,
+                args=(subproblem, config),
+                name=f"SubTSP‑{subproblem.solution_version}",
+            )
+            proc.start()
+            active_processes[proc] = subproblem
+            logger.debug("Launched %s (alive=%d)", subproblem.solution_version, len(active_processes))
+    finally:
+        for proc in list(active_processes.keys()):
+            proc.join()
+        active_processes.clear()
+        logger.info("Manager shut‑down complete – final objective = %s", config.global_obj.value)
 
 def verifier_manager(config):
+    _configure_logging('verifier')
     logger = logging.getLogger(__name__)
     active_processes: Dict[mp.Process, "Subproblem"] = {}
     try:
@@ -610,4 +613,3 @@ if __name__ == "__main__":
         args.instance_path = f'{file_path}/{file}'
         main(args)
 
-        

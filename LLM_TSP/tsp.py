@@ -170,7 +170,9 @@ class TravelingSalesmenProblem:
         current_segment = []
 
         for node in current_route:
-            if node not in nodes_in_rect:
+            # edit: nodes_in_rect is not all nodes but the nodes in last coordinates
+            # if node not in nodes_in_rect:
+            if node not in all_nodes_in_rect:
                 current_segment.append(node)
             else:
                 if current_segment:
@@ -181,7 +183,9 @@ class TravelingSalesmenProblem:
         if current_segment:
             route_segments.append(current_segment)
 
-        return updated_route_edges, nodes_in_rect, route_segments
+        return updated_route_edges, all_nodes_in_rect, route_segments
+        # edit: nodes_in_rect is not all nodes but the nodes in last coordinates
+        # return updated_route_edges, nodes_in_rect, route_segments
 
     def remove_edges_given_nodes(self, current_route, node_list):
         route_segments = []

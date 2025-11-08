@@ -9,3 +9,4 @@ LKH-3.0.13
 *.sol
 *.res
 *.0*
+*/__pycache__
