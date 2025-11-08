@@ -4,3 +4,8 @@ LKH_solutions/*
 logs/*
 LKH_runs_solutions/*
 experiments/LLM*
+__pycache__
+LKH-3.0.13
+*.sol
+*.res
+*.0*

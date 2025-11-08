@@ -609,3 +609,5 @@ if __name__ == "__main__":
     for file in tsp_files:
         args.instance_path = f'{file_path}/{file}'
         main(args)
+
+        
