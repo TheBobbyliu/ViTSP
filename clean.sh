@@ -1,0 +1,2 @@
+rm *.res
+rm *.sol
