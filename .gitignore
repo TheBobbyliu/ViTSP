@@ -10,3 +10,5 @@ LKH-3.0.13
 *.res
 *.0*
 */__pycache__
+*.pul
+*.sav

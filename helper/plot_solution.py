@@ -156,13 +156,23 @@ class SolutionPlot:
         coordinates = np.array(coordinates)
         x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
 
-        grid_res_x = (x_max - x_min) // max((int(np.ceil(np.sqrt(num_nodes / 100)))), 2)
-        grid_res_y = (y_max - y_min) // max((int(np.ceil(np.sqrt(num_nodes / 100)))), 2)
+        x_span = max(x_max - x_min, 1)
+        y_span = max(y_max - y_min, 1)
+        desired_ticks = getattr(args, "vlm_ticks_per_axis", 0) or 0
 
-        if num_nodes<500:
-            node_size=10
+        if desired_ticks > 0:
+            # User override: divide each axis span into the requested number of bins.
+            grid_res_x = max(int(np.ceil(x_span / desired_ticks)), 1)
+            grid_res_y = max(int(np.ceil(y_span / desired_ticks)), 1)
         else:
-            node_size=2
+            divisor = max(int(np.ceil(np.sqrt(max(num_nodes, 1) / 100))), 2)
+            grid_res_x = max(int(x_span // divisor), 1)
+            grid_res_y = max(int(y_span // divisor), 1)
+
+        if num_nodes < 500:
+            node_size = 10
+        else:
+            node_size = 2
         # Create the base figure
         fig = go.Figure()
 
@@ -267,6 +277,5 @@ def generate_routes(solution):
             current_route = [0]
 
     return routes
-
 
 

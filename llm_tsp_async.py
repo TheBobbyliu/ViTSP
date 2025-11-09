@@ -526,7 +526,7 @@ if __name__ == "__main__":
     # parser.add_argument('--max_iterations', type=int, default=1,
                         help='Maximum number of iterations for optimization')
     # parser.add_argument('--total_time_budget', type=float, default=2000,
-    parser.add_argument('--total_time_budget', type=float, default=2000,
+    parser.add_argument('--total_time_budget', type=float, default=3000,
                         help='Wall time in seconds')
     parser.add_argument('--max_workers', type=int, default=4,
                         help='Maximum number of solvers working in parallel')
@@ -568,6 +568,8 @@ if __name__ == "__main__":
                         help='Flag to enable hard-coded subrectangle')
     parser.add_argument('--gridding_resolution', type=int, default=5,
                         help='divide the plot into K if wanting to fix')
+    parser.add_argument('--vlm_ticks_per_axis', type=int, default=0,
+                        help='Override tick density for VLM plots; 0 keeps the automatic heuristic')
 
     args = parser.parse_args()
 
@@ -598,11 +600,11 @@ if __name__ == "__main__":
         # 'fl3795.tsp',
         # 'fnl4461.tsp',
         # 'rl5915.tsp',
-        # 'rl5934.tsp',
-        # 'pla7397.tsp',
+        'rl5934.tsp',
+        'pla7397.tsp',
         # 'rl11849.tsp',
         # 'usa13509.tsp',
-        # 'brd14051.tsp',
+        'brd14051.tsp',
         'd15112.tsp',
         # 'd18512.tsp',
         # 'pla33810.tsp',
@@ -612,4 +614,3 @@ if __name__ == "__main__":
     for file in tsp_files:
         args.instance_path = f'{file_path}/{file}'
         main(args)
-

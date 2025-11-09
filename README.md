@@ -43,3 +43,5 @@ It can also be downloaded at [TSPLIB](http://comopt.ifi.uni-heidelberg.de/softwa
 - `--hard_coded_subrectangle`: Bypasses LLM prompting and injects fixed rectangles for ablation.
 - `--gridding_resolution`: Controls how aggressively regions are zoomed when they exceed `max_node_for_solver`.
 
+### Visualization
+- `--vlm_ticks_per_axis`: Sets the number of tick intervals on each axis of the plot sent to the VLM; raise it (e.g., `20`) for denser ticks, or leave at `0` to keep the automatic heuristic.

@@ -126,7 +126,14 @@ def llm_visual_selection(args, solution_plotter, current_route, pending_subprobl
     pending_subproblems = peek_queue(pending_subproblem_queue, traj_lock)
     prior_selections = peek_queue(prior_selection_traj, traj_lock)
 
-    pending_coords = [coord for s_p in pending_subproblems for coord in s_p.coordinates_list]
+    pending_coords = []
+    for subproblem in pending_subproblems:
+        if not subproblem:
+            continue
+        coords = getattr(subproblem, "coordinates_list", None)
+        if not coords:
+            continue
+        pending_coords.extend(coords)
     print("Pending length is ", pending_coords)
 
     response_text = current_selector.vision_chat(fig=tsp_plot,
