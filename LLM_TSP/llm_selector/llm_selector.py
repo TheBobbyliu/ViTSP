@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 import logging
 import psutil
-from typing import Iterable, List, Tuple, Union, Any, Dict, Optional
+import re
+from typing import Iterable, List, Tuple, Union, Any, Dict, Optional, Set
 from multiprocessing import Queue
 import queue
 from helper.parse_llm_response import LLMTextParser
@@ -125,6 +126,7 @@ def llm_visual_selection(args, solution_plotter, current_route, pending_subprobl
 
     pending_subproblems = peek_queue(pending_subproblem_queue, traj_lock)
     prior_selections = peek_queue(prior_selection_traj, traj_lock)
+    prior_selection_text = format_prior_selection_history(prior_selections, limit=10)
 
     pending_coords = []
     for subproblem in pending_subproblems:
@@ -137,7 +139,7 @@ def llm_visual_selection(args, solution_plotter, current_route, pending_subprobl
     print("Pending length is ", pending_coords)
 
     response_text = current_selector.vision_chat(fig=tsp_plot,
-                                                 prior_selection=prior_selections,
+                                                 prior_selection=prior_selection_text,
                                                  num_region=num_subregion,
                                                  pending_coords=pending_coords,
                                                  x_min=int(x_min),
@@ -371,6 +373,18 @@ def _safe_copy(proxy, default):
         logging.getLogger().warning("manager proxy unavailable – returning default")
         return default
 
+
+_COORDINATE_TAG_RE = re.compile(r"<coordinates>.*?</coordinates>", re.DOTALL)
+
+
+def _prior_entry_signature(entry_text: str) -> Tuple[str, ...]:
+    """
+    Build a hashable signature for a trajectory entry using its coordinate tags.
+    Falling back to the entire text keeps non-coordinate entries deduplicated too.
+    """
+    coordinates = tuple(_COORDINATE_TAG_RE.findall(entry_text))
+    return coordinates if coordinates else (entry_text,)
+
 # ---------------------------------------------------------------------------
 # LLM producer
 # ---------------------------------------------------------------------------
@@ -384,6 +398,37 @@ def peek_queue(q, traj_lock):
         for item in temp:
             q.put(item)
     return temp
+
+
+def format_prior_selection_history(prior_entries: Iterable[Any], limit: int = 10) -> str:
+    """
+    Return the latest prior selections as newline-separated text,
+    skipping None or empty placeholders and deduplicating coordinates.
+    """
+    filtered_entries: List[str] = []
+    for entry in prior_entries:
+        if entry is None:
+            continue
+        entry_text = str(entry).strip()
+        if entry_text:
+            filtered_entries.append(entry_text)
+
+    if not filtered_entries:
+        return ""
+
+    seen_signatures: Set[Tuple[str, ...]] = set()
+    unique_recent: List[str] = []
+    for entry_text in reversed(filtered_entries):
+        signature = _prior_entry_signature(entry_text)
+        if signature in seen_signatures:
+            continue
+        seen_signatures.add(signature)
+        unique_recent.append(entry_text)
+        if len(unique_recent) >= limit:
+            break
+
+    unique_recent.reverse()
+    return "\n".join(unique_recent)
 
 async def _llm_producer(llm_name, args, tsp_instance, llm_selector, pending_subproblem_queue, global_obj, global_sol, sol_lock, obj_lock, selection_traj, deadline, t0, traj_queue, traj_lock,
                         X_MIN, X_MAX, Y_MIN, Y_MAX, GRID_RES,

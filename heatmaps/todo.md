@@ -1,0 +1,1 @@
+1. change the x, y scale to make it align with the graph

@@ -12,3 +12,4 @@ LKH-3.0.13
 */__pycache__
 *.pul
 *.sav
+.env

@@ -4,10 +4,6 @@ from pathlib import Path
 import pandas as pd
 import tsplib95
 
-import os
-OPENAI_API_KEY = "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"
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
-
 # ---- TSPLIB proven optima (L*). Use Reinelt’s values; fill with known L*.
 # NOTE: If you have a local table of L* values, place it here.
 TSPLIB_OPT = {

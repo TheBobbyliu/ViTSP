@@ -10,6 +10,7 @@ from typing import Iterable, List, Tuple, Union, Any, Dict, Sequence
 import argparse
 import psutil
 import os
+from collections import Counter
 from LLM_TSP.tsp import TravelingSalesmenProblem, SubTSP
 from exact_concorde.exact_concorde import Concorde
 # from exact_Gurobi.gurobi_model import GurobiTSPModel
@@ -68,6 +69,42 @@ class SubTSPTask:
         self.parent = parent
         self.child = child
         #TODO: the starting and ending index in the current route
+
+
+logger = logging.getLogger(__name__)
+
+def _strip_terminal_duplicate(route: Sequence[int]) -> List[int]:
+    """
+    Normalize a tour by removing the duplicated terminal node (e.g. [0,1,...,0]).
+    Returns a list copy to avoid mutating the caller's route.
+    """
+    if not route:
+        return []
+    if len(route) > 1 and route[0] == route[-1]:
+        return list(route[:-1])
+    return list(route)
+
+
+def _summarize(values: Sequence[int] | None, limit: int = 10) -> str:
+    if not values:
+        return "[]"
+    seq = list(values)
+    if len(seq) <= limit:
+        return "[" + ", ".join(map(str, seq)) + "]"
+    head = ", ".join(map(str, seq[:limit]))
+    return f"[{head}, ... ({len(seq)} total)]"
+
+
+def validate_route_nodes(reference_route: Sequence[int], candidate_route: Sequence[int]) -> tuple[bool, List[int], List[int]]:
+    """
+    Compare the multiset of vertices in two routes (ignoring the duplicated depot).
+    Returns (is_valid, missing_nodes, extra_nodes).
+    """
+    ref_counter = Counter(_strip_terminal_duplicate(reference_route))
+    cand_counter = Counter(_strip_terminal_duplicate(candidate_route))
+    missing = sorted((ref_counter - cand_counter).elements())
+    extra = sorted((cand_counter - ref_counter).elements())
+    return len(missing) == 0 and len(extra) == 0, missing, extra
 
 def evaluate_best_gain(results, current_obj):
     """
@@ -291,6 +328,18 @@ def reformulate_and_solve_subTSP(args, tsp_instance, current_route, current_obj,
         new_obj = tsp_instance.calculate_total_distance(new_route)
 
     solver_latency = time.time() - start_time
+
+    # Ensure the reconstructed tour is well-formed before handing it back.
+    route_ok, missing, extra = validate_route_nodes(current_route, new_route)
+    if not route_ok:
+        logger.error(
+            "Discarding sub-TSP solution due to node mismatch (missing=%s, extra=%s, removed=%s)",
+            _summarize(missing),
+            _summarize(extra),
+            _summarize(removed_nodes),
+        )
+        new_route = current_route
+        new_obj = current_obj
 
     return new_route, new_obj, solver_latency
 
@@ -527,6 +576,16 @@ def subproblem_solver(subproblem, config):
         new_route, new_obj, solver_latency = current_route, current_obj, 0
         coordinates_list, removed_nodes, route_segments = None, None, None
 
+    route_valid, missing_nodes, extra_nodes = validate_route_nodes(current_route, new_route)
+    if not route_valid:
+        log.error(
+            "Ignoring invalid sub-route (missing=%s, extra=%s, removed=%s)",
+            _summarize(missing_nodes),
+            _summarize(extra_nodes),
+            _summarize(removed_nodes),
+        )
+        new_route, new_obj = current_route, current_obj
+
     # ---------------------------------
     # hill-climbing acceptance criteria
     # ---------------------------------
@@ -552,6 +611,7 @@ def subproblem_solver(subproblem, config):
                     ", ".join([str(x) for x in config.global_sol]),
                     ", ".join([str(x) for x in removed_nodes]),
                 )
+                delta_obj = 0
                 # assert False
         now = round(time.time() - config.t0 + config.warmstart_latency, 2)
         proc = mp.current_process()

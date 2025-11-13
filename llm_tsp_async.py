@@ -18,6 +18,9 @@ from dataclasses import asdict, replace
 from pathlib import Path
 import json
 
+import dotenv
+dotenv.load_dotenv()
+
 from LLM_TSP.queue import SemaphoreQueue as Queue
 
 # from LLM_TSP.ablation_config import instance_max_nodes, instance_time_budget
@@ -27,13 +30,11 @@ from LLM_TSP.config import LLMConfig, SolverConfig
 from LLM_TSP.tsp import TravelingSalesmenProblem
 from helper.parse_instances import FileParser
 from LLM_TSP.initial_solution import initialize_solution
-from LLM_TSP.llm import GPT, RoundRobinLLMSelector
+from LLM_TSP.llm import GPT, RoundRobinLLMSelector, ClaudeAI
 from helper.plot_solution import SolutionPlot
 from LLM_TSP.selector import RandomSelector
 from LLM_TSP.llm_selector.llm_selector import _llm_producer
 
-OPENAI_API_1 = "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"
-OPENAI_API_2 = "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"
 
 def _configure_logging(filename='logger') -> None:
     logging.basicConfig(level=logging.INFO,
@@ -304,8 +305,15 @@ def main(args):
     tsp_instance, boundary_info = tsp_instance_initializer(args)
     X_MIN, X_MAX, Y_MIN, Y_MAX, GRID_RES = boundary_info 
 
-    fast_thinking_llm_selector = RoundRobinLLMSelector([GPT(OPENAI_API_1, args.fast_llm_model)])
-    reasoning_llm_selector = RoundRobinLLMSelector([GPT(OPENAI_API_2, args.reasoning_llm_model)])
+    if 'claude' in args.fast_llm_model:
+        fast_thinking_llm_selector = RoundRobinLLMSelector([ClaudeAI(os.environ["ANTHROPIC_API_KEY"], args.fast_llm_model)])
+    else:
+        fast_thinking_llm_selector = RoundRobinLLMSelector([GPT(os.environ["OPENAI_API_KEY"], args.fast_llm_model)])
+    
+    if 'claude' in args.reasoning_llm_model:
+        reasoning_llm_selector = RoundRobinLLMSelector([ClaudeAI(os.environ["ANTHROPIC_API_KEY"], args.reasoning_llm_model)])
+    else:
+        reasoning_llm_selector = RoundRobinLLMSelector([GPT(os.environ["OPENAI_API_KEY"], args.reasoning_llm_model)])
 
     backup_selector = RandomSelector(model_name='random')
     solution_plotter = SolutionPlot()
@@ -525,8 +533,8 @@ if __name__ == "__main__":
     parser.add_argument('--max_iterations', type=int, default=5,
     # parser.add_argument('--max_iterations', type=int, default=1,
                         help='Maximum number of iterations for optimization')
-    # parser.add_argument('--total_time_budget', type=float, default=2000,
-    parser.add_argument('--total_time_budget', type=float, default=3000,
+    parser.add_argument('--total_time_budget', type=float, default=1000,
+    # parser.add_argument('--total_time_budget', type=float, default=3000,
                         help='Wall time in seconds')
     parser.add_argument('--max_workers', type=int, default=4,
                         help='Maximum number of solvers working in parallel')
@@ -552,9 +560,11 @@ if __name__ == "__main__":
     # ---------------------------------------------------------------------------
     parser.add_argument('--fast_llm_model', type=str, default='gpt-5-mini-2025-08-07', 
     # parser.add_argument('--fast_llm_model', type=str, default='gpt-4.1-2025-04-14', 
+    # parser.add_argument('--fast_llm_model', type=str, default='claude-haiku-4-5-20251001', 
                         help='LLM model name for selector, qwen2.5-32b-v, gpt-4o ') 
     parser.add_argument('--reasoning_llm_model', type=str, default='gpt-5-2025-08-07', 
     # parser.add_argument('--reasoning_llm_model', type=str, default='o4-mini-2025-04-16', 
+    # parser.add_argument('--reasoning_llm_model', type=str, default='claude-opus-4-1-20250805', 
                         help='LLM model name for selector, qwen2.5-32b-v, gpt-4o ') 
     parser.add_argument('--keep_selection_trajectory', action='store_true',
                         help='whether incorporating selection trajectory for llm')
@@ -576,23 +586,23 @@ if __name__ == "__main__":
     file_path = args.instance_path
     tsp_files = [
         # 'a280.tsp',
-        # 'dsj1000.tsp',
+        'dsj1000.tsp',
         # 'pr1002.tsp',
         # 'u1060.tsp',
         # 'vm1084.tsp',
         # 'pcb1173.tsp',
-        # 'd1291.tsp',
+        'd1291.tsp',
         # 'rl1304.tsp',
         # 'rl1323.tsp',
         # 'nrw1379.tsp',
         # 'fl1400.tsp',
         # 'u1432.tsp',
-        # 'fl1577.tsp',
+        'fl1577.tsp',
         # 'd1655.tsp',
         # 'vm1748.tsp',
         # 'u1817.tsp',
         # 'rl1889.tsp',
-        # 'd2103.tsp',
+        'd2103.tsp',
         # 'u2152.tsp',
         # 'u2319.tsp',
         # 'pr2392.tsp',
@@ -600,12 +610,12 @@ if __name__ == "__main__":
         # 'fl3795.tsp',
         # 'fnl4461.tsp',
         # 'rl5915.tsp',
-        'rl5934.tsp',
-        'pla7397.tsp',
+        # 'rl5934.tsp',
+        # 'pla7397.tsp',
         # 'rl11849.tsp',
         # 'usa13509.tsp',
-        'brd14051.tsp',
-        'd15112.tsp',
+        # 'brd14051.tsp',
+        # 'd15112.tsp',
         # 'd18512.tsp',
         # 'pla33810.tsp',
         # 'pla85900.tsp',

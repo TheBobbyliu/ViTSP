@@ -8,6 +8,7 @@ import json
 import logging
 import math
 import re
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List, Optional, Sequence, Tuple
@@ -120,7 +121,41 @@ def normalize_rectangle(raw: object) -> Optional[Tuple[float, float, float, floa
     return None
 
 
-def collect_records(json_files: Iterable[Path], task_filter: str) -> Tuple[List[SelectionRecord], Tuple[float, float, float, float]]:
+def resolve_sample_image_hint(image_hint: str, records_dir: Path, repo_root: Path, json_path: Path) -> Optional[Path]:
+    """Attempt to locate the sample image referenced inside a JSON payload."""
+
+    raw_path = Path(image_hint)
+    candidates: List[Path] = []
+    seen: set[Path] = set()
+
+    def add_candidate(path: Path) -> None:
+        if path in seen:
+            return
+        seen.add(path)
+        candidates.append(path)
+
+    if raw_path.is_absolute():
+        add_candidate(raw_path)
+    else:
+        add_candidate(repo_root / raw_path)
+        add_candidate(records_dir.parent / raw_path)
+        add_candidate(records_dir / raw_path)
+        add_candidate(json_path.parent / raw_path)
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate.resolve()
+
+    logging.debug("Unable to resolve sample image '%s' relative to %s", image_hint, json_path)
+    return None
+
+
+def collect_records(
+    json_files: Iterable[Path],
+    task_filter: str,
+    records_dir: Path,
+    repo_root: Path,
+) -> Tuple[List[SelectionRecord], Tuple[float, float, float, float], Optional[Path]]:
     records: List[SelectionRecord] = []
     x_min = math.inf
     x_max = -math.inf
@@ -128,6 +163,7 @@ def collect_records(json_files: Iterable[Path], task_filter: str) -> Tuple[List[
     y_max = -math.inf
     processed = 0
     matched = 0
+    sample_image_path: Optional[Path] = None
 
     for path in json_files:
         processed += 1
@@ -139,7 +175,10 @@ def collect_records(json_files: Iterable[Path], task_filter: str) -> Tuple[List[
             continue
 
         record_task = payload.get("taskname") or payload.get("task_name")
-        if record_task != task_filter:
+        if record_task is None or task_filter not in record_task:
+            continue
+        if payload.get("error") is not None:
+            print(path, 'shows error, skip')
             continue
 
         coords = payload.get("selected_coordinates")
@@ -159,6 +198,11 @@ def collect_records(json_files: Iterable[Path], task_filter: str) -> Tuple[List[
 
         if not rectangles:
             continue
+
+        if sample_image_path is None:
+            image_hint = payload.get("image_path") or payload.get("selection_figure")
+            if isinstance(image_hint, str):
+                sample_image_path = resolve_sample_image_hint(image_hint, records_dir, repo_root, path)
 
         bounds = payload.get("bounds")
         if isinstance(bounds, dict):
@@ -192,7 +236,7 @@ def collect_records(json_files: Iterable[Path], task_filter: str) -> Tuple[List[
     if not records or not all(math.isfinite(val) for val in (x_min, x_max, y_min, y_max)):
         raise ValueError("No valid records or bounds found for the given task")
 
-    return records, (x_min, x_max, y_min, y_max)
+    return records, (x_min, x_max, y_min, y_max), sample_image_path
 
 
 def value_to_index(value: float, min_bound: float, bound_range: float, grid_size: int, is_upper: bool) -> int:
@@ -266,8 +310,26 @@ def save_heatmap(
     logging.info("Saved %s", output_path)
 
 
+def copy_sample_image(sample_image: Optional[Path], output_dir: Path, base_name: str) -> None:
+    """Copy a representative raw image into the heatmap output directory."""
+
+    if sample_image is None:
+        logging.info("Skipping sample image export because none was found in the records.")
+        return
+
+    destination = output_dir / f"{base_name}_sample{sample_image.suffix or '.png'}"
+    try:
+        shutil.copy(sample_image, destination)
+    except OSError as exc:  # noqa: BLE001
+        logging.error("Failed to copy sample image from %s: %s", sample_image, exc)
+        return
+
+    logging.info("Saved sample image to %s", destination)
+
+
 def main() -> None:
     args = parse_args()
+    print(args.modelname, args.taskname)
     logging.basicConfig(level=getattr(logging, args.log_level), format="%(levelname)s - %(message)s")
 
     repo_root = args.records_root.resolve() if args.records_root else Path(__file__).resolve().parent
@@ -280,7 +342,7 @@ def main() -> None:
     if not json_files:
         raise FileNotFoundError(f"No JSON records found under {records_dir}")
 
-    records, bounds = collect_records(json_files, args.taskname)
+    records, bounds, sample_image = collect_records(json_files, args.taskname, records_dir, repo_root)
     freq_all, freq_with_delta, freq_improved, objective_delta_sum = accumulate_heatmaps(
         records, bounds, args.grid_size
     )
@@ -323,6 +385,8 @@ def main() -> None:
         args.dpi,
         cmap="coolwarm",
     )
+
+    copy_sample_image(sample_image, output_dir, base_name)
 
 
 if __name__ == "__main__":
