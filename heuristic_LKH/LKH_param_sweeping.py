@@ -8,7 +8,7 @@ import argparse
 from tqdm import tqdm
 import numpy as np
 
-sys.path.append('/local/scratch/a/XXXX-1/vllm-carbon-XXXX-5/LLM-TSP-async')
+sys.path.append('../')
 
 from helper.parse_instances import FileParser
 from LLM_TSP.tsp import TravelingSalesmenProblem
@@ -21,6 +21,9 @@ def main(args):
 
     for file in tqdm(files):
         if file.startswith('.') or not file.endswith('.tsp'):
+            continue
+        task = file.split("/")[-1].split(".tsp")[0]
+        if task not in ['d1291', 'rl5934', 'brd14051', 'd15112']:
             continue
 
         dim = file_parser.get_dim_from_filename(file)
@@ -47,19 +50,33 @@ def main(args):
 
         n_nodes = len(nodes)
         trial_increments = list(range(n_nodes, n_nodes + 1, n_nodes)) # n_nodes is the default setting, incrementing with the num of nodes
-        run_increments = list(range(10, args.max_runs + 1, args.run_step)) # 10 is the default setting
+        run_increments = list(range(1200, args.max_runs + 1, args.run_step)) # 10 is the default setting
 
         result_file_path = (
-            f'/local/scratch/a/XXXX-1/vllm-carbon-XXXX-5/LLM-TSP-async/experiments/LKH/LKH_more_run_48_cores/'
+            f'../LKH_runs_solutions/'
             f'{file.split(".")[0]}_param_sweep_{args.solution_model}_time_limit_{args.time_limit_per_run}_max_trails_{args.max_trials}_max_runs_{args.max_runs}.csv'
         )
 
-        with open(result_file_path, mode='w', newline='') as result_file:
+        file_exists = os.path.isfile(result_file_path)
+        existing_results = set()
+        if file_exists:
+            with open(result_file_path, mode='r', newline='') as result_file:
+                reader = csv.DictReader(result_file)
+                for row in reader:
+                    try:
+                        existing_results.add((int(row['Max_Trials']), int(row['Max_Runs'])))
+                    except (KeyError, ValueError):
+                        continue
+
+        with open(result_file_path, mode='a' if file_exists else 'w', newline='') as result_file:
             writer = csv.writer(result_file)
-            writer.writerow(['Instance', 'Nodes', 'Max_Trials', 'Max_Runs', 'Latency', 'Objective_Value'])
+            if not file_exists:
+                writer.writerow(['Instance', 'Nodes', 'Max_Trials', 'Max_Runs', 'Latency', 'Objective_Value'])
 
             for max_trials in trial_increments:
                 for runs in run_increments:
+                    if (max_trials, runs) in existing_results:
+                        continue
                     start_time = time.time()
 
                     problem_path = os.path.join(args.instance_path, file)
@@ -86,7 +103,7 @@ if __name__ == "__main__":
     parser.add_argument('--time_limit_per_run', type=float, default=100_000, help='Time limit per run')
     parser.add_argument('--max_trials', type=int, default=100_000, help='Maximum number of trials for LKH sweep')
     parser.add_argument('--trial_step', type=int, default=100, help='Step size for increasing max_trials')
-    parser.add_argument('--max_runs', type=int, default=1_000, help='Maximum value for max_runs sweep')
+    parser.add_argument('--max_runs', type=int, default=1_0000, help='Maximum value for max_runs sweep')
     parser.add_argument('--run_step', type=int, default=10, help='Step size for increasing max_runs')
 
     args = parser.parse_args()

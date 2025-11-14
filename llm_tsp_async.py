@@ -308,12 +308,12 @@ def main(args):
     if 'claude' in args.fast_llm_model:
         fast_thinking_llm_selector = RoundRobinLLMSelector([ClaudeAI(os.environ["ANTHROPIC_API_KEY"], args.fast_llm_model)])
     else:
-        fast_thinking_llm_selector = RoundRobinLLMSelector([GPT(os.environ["OPENAI_API_KEY"], args.fast_llm_model)])
+        fast_thinking_llm_selector = RoundRobinLLMSelector([GPT(os.environ["OPENAI_API_KEY"], args.fast_llm_model, args.base_url)])
     
     if 'claude' in args.reasoning_llm_model:
         reasoning_llm_selector = RoundRobinLLMSelector([ClaudeAI(os.environ["ANTHROPIC_API_KEY"], args.reasoning_llm_model)])
     else:
-        reasoning_llm_selector = RoundRobinLLMSelector([GPT(os.environ["OPENAI_API_KEY"], args.reasoning_llm_model)])
+        reasoning_llm_selector = RoundRobinLLMSelector([GPT(os.environ["OPENAI_API_KEY"], args.reasoning_llm_model, args.base_url)])
 
     backup_selector = RandomSelector(model_name='random')
     solution_plotter = SolutionPlot()
@@ -533,7 +533,7 @@ if __name__ == "__main__":
     parser.add_argument('--max_iterations', type=int, default=5,
     # parser.add_argument('--max_iterations', type=int, default=1,
                         help='Maximum number of iterations for optimization')
-    parser.add_argument('--total_time_budget', type=float, default=1000,
+    parser.add_argument('--total_time_budget', type=float, default=3000,
     # parser.add_argument('--total_time_budget', type=float, default=3000,
                         help='Wall time in seconds')
     parser.add_argument('--max_workers', type=int, default=4,
@@ -552,16 +552,19 @@ if __name__ == "__main__":
     # parser.add_argument('--SolverTimeLimit', type=float, default=30,
     parser.add_argument('--SolverTimeLimit', type=float, default=10,
                         help='Time allowed for Concorde solver')
-    parser.add_argument('--max_node_for_solver', type=int, default=1000,
+    parser.add_argument('--max_node_for_solver', type=int, default=500,
                         help='Max number of nodes sent to solver')
 
     # ---------------------------------------------------------------------------
     # Selector Specification
     # ---------------------------------------------------------------------------
+    parser.add_argument('--base_url', type=str, default="", help="URL for local VLMs")
+    # parser.add_argument('--fast_llm_model', type=str, default='qwen3-vl-4b-fast', 
     parser.add_argument('--fast_llm_model', type=str, default='gpt-5-mini-2025-08-07', 
     # parser.add_argument('--fast_llm_model', type=str, default='gpt-4.1-2025-04-14', 
     # parser.add_argument('--fast_llm_model', type=str, default='claude-haiku-4-5-20251001', 
                         help='LLM model name for selector, qwen2.5-32b-v, gpt-4o ') 
+    # parser.add_argument('--reasoning_llm_model', type=str, default='qwen3-vl-4b-reason', 
     parser.add_argument('--reasoning_llm_model', type=str, default='gpt-5-2025-08-07', 
     # parser.add_argument('--reasoning_llm_model', type=str, default='o4-mini-2025-04-16', 
     # parser.add_argument('--reasoning_llm_model', type=str, default='claude-opus-4-1-20250805', 
@@ -586,23 +589,23 @@ if __name__ == "__main__":
     file_path = args.instance_path
     tsp_files = [
         # 'a280.tsp',
-        'dsj1000.tsp',
+        # 'dsj1000.tsp',
         # 'pr1002.tsp',
         # 'u1060.tsp',
         # 'vm1084.tsp',
         # 'pcb1173.tsp',
-        'd1291.tsp',
+        # 'd1291.tsp',
         # 'rl1304.tsp',
         # 'rl1323.tsp',
         # 'nrw1379.tsp',
         # 'fl1400.tsp',
         # 'u1432.tsp',
-        'fl1577.tsp',
+        # 'fl1577.tsp',
         # 'd1655.tsp',
         # 'vm1748.tsp',
         # 'u1817.tsp',
         # 'rl1889.tsp',
-        'd2103.tsp',
+        # 'd2103.tsp',
         # 'u2152.tsp',
         # 'u2319.tsp',
         # 'pr2392.tsp',
@@ -614,8 +617,8 @@ if __name__ == "__main__":
         # 'pla7397.tsp',
         # 'rl11849.tsp',
         # 'usa13509.tsp',
-        # 'brd14051.tsp',
-        # 'd15112.tsp',
+        'brd14051.tsp',
+        'd15112.tsp',
         # 'd18512.tsp',
         # 'pla33810.tsp',
         # 'pla85900.tsp',

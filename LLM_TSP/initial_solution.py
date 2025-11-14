@@ -13,6 +13,7 @@ import multiprocessing as mp
 from functools import partial
 import lkh
 import time
+import os
 
 class Initializer:
     def __init__(self, name):
@@ -31,6 +32,8 @@ class Initializer:
 
         # LKH 3.0.13 
         solver_path = './LKH-3.0.13/LKH'
+        if not os.path.exists(solver_path):
+            solver_path = '../LKH-3.0.13/LKH'
         route = lkh.solve(solver_path, problem=problem, problem_file=problem_path, max_trials=max_trials, runs=runs)[0] #  max_trials = 100000 or len(tsp_instance.node_coord_dict)
         route = [i-1 for i in route]
         if float_result:

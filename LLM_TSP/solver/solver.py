@@ -19,6 +19,7 @@ import logging
 from dataclasses import dataclass, asdict
 import numpy as np                      
 from LLM_TSP.llm import LLMRecorder
+from LLM_TSP.queue import SemaphoreQueue
 
 
 __all__ = [
@@ -350,16 +351,22 @@ def process_subTSP(args, task, tsp_instance, current_route, current_obj, result_
 
     removed_nodes, route_segments = task.removed_nodes, task.route_segments
 
-    # Perform the sub-TSP computation
-    results = reformulate_and_solve_subTSP(args, tsp_instance, current_route, current_obj, route_segments, removed_nodes)
-    task.new_route      = results[0]
-    task.new_obj        = results[1]
-    task.solver_latency = results[2]
-    # result_queue.put(results, block=False)  # Send the result back to the parent process
+    try:
+        results = reformulate_and_solve_subTSP(args, tsp_instance, current_route, current_obj, route_segments, removed_nodes)
+        task.new_route      = results[0]
+        task.new_obj        = results[1]
+        task.solver_latency = results[2]
+    except Exception as exc:
+        logger.exception("process_subTSP failed for task %s: %s", task.id, exc)
+        task.new_route = current_route
+        task.new_obj = current_obj
+        task.solver_latency = 0.0
+        task.gain = 0
+
     try:
         result_queue.put(task, block=False)
     except queue.Full:
-        print("Queue is full! Dropping result or retrying...")
+        logger.warning("Result queue is full, dropping task %s result", task.id)
 
 
 def format_task_traj(task):
@@ -533,7 +540,7 @@ def subproblem_solver(subproblem, config):
 
     # core_map = assign_proportional_cores_to_tasks(tasks)
     processes = []
-    result_queue = mp.Queue()
+    result_queue = SemaphoreQueue()
 
     start_time = time.time()
 
@@ -553,10 +560,25 @@ def subproblem_solver(subproblem, config):
     num_processes = len(tasks)
 
     while completed_processes < num_processes:
-        if not result_queue.empty():
-            task = result_queue.get()
-            results.append(task)
-            completed_processes += 1
+        try:
+            task = result_queue.get(timeout=0.5)
+        except Empty:
+            # If no workers are alive anymore, break to avoid spinning forever.
+            if not any(proc.is_alive() for proc in processes):
+                break
+            continue
+
+        if task is None:
+            continue
+
+        results.append(task)
+        completed_processes += 1
+
+    for proc in processes:
+        proc.join(timeout=1)
+        if proc.is_alive():
+            proc.terminate()
+            proc.join()
 
     log.info('Time spent in multiprocessing subTSPs: %f', time.time() - start_time)
 
@@ -732,7 +754,7 @@ def subproblem_verifier(subproblem, config):
 
     # core_map = assign_proportional_cores_to_tasks(tasks)
     processes = []
-    result_queue = mp.Queue()
+    result_queue = SemaphoreQueue()
 
     start_time = time.time()
 
@@ -751,10 +773,24 @@ def subproblem_verifier(subproblem, config):
     num_processes = len(tasks)
 
     while completed_processes < num_processes:
-        if not result_queue.empty():
-            task = result_queue.get()
-            results.append(task)
-            completed_processes += 1
+        try:
+            task = result_queue.get(timeout=0.5)
+        except Empty:
+            if not any(proc.is_alive() for proc in processes):
+                break
+            continue
+
+        if task is None:
+            continue
+
+        results.append(task)
+        completed_processes += 1
+
+    for proc in processes:
+        proc.join(timeout=1)
+        if proc.is_alive():
+            proc.terminate()
+            proc.join()
 
     log.info('Time spent in multiprocessing subTSPs: %f', time.time() - start_time)
 

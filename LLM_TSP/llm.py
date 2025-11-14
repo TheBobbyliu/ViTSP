@@ -19,6 +19,7 @@ import threading
 from typing import Iterable, List, Optional, Sequence
 from PIL import Image
 import plotly.graph_objects as go
+from plotly.basedatatypes import BaseFigure
 import cProfile
 import pstats
 # from pdf2image import convert_from_path
@@ -29,6 +30,16 @@ try:
 except ImportError:  # pragma: no cover - optional dependency
     Anthropic = None
 
+try:
+    from kaleido.scopes.plotly import PlotlyScope
+except ImportError:  # pragma: no cover - optional dependency
+    PlotlyScope = None
+
+try:
+    from matplotlib.figure import Figure as MPLFigure
+except ImportError:  # pragma: no cover - optional dependency
+    MPLFigure = None
+
 MODEL_TYPES = {
     "gpt-4o": "gpt-4o",
     "o1": "o1",
@@ -36,6 +47,9 @@ MODEL_TYPES = {
     "qwen2.5-32b-v":"Qwen/Qwen2.5-VL-32B-Instruct",
     "qwen2.5-7b-v":"Qwen/Qwen2.5-VL-7B-Instruct"
 }
+
+_PLOTLY_SCOPE_LOCK = threading.Lock()
+_PLOTLY_SCOPE: Optional["PlotlyScope"] = None
 
 
 class LLMRecorder:
@@ -233,10 +247,37 @@ class VisionLLMBase:
     @staticmethod
     def _image_from_figure(fig) -> Image.Image:
         buf = io.BytesIO()
-        fig.write_image(buf, format="png", engine="kaleido")
+        if isinstance(fig, BaseFigure):
+            image_bytes = VisionLLMBase._plotly_figure_to_png(fig)
+            buf.write(image_bytes)
+        elif MPLFigure is not None and isinstance(fig, MPLFigure):
+            fig.savefig(buf, format="png", bbox_inches="tight")
+        elif hasattr(fig, "savefig"):
+            fig.savefig(buf, format="png")
+        else:
+            fig.write_image(buf, format="png", engine="kaleido")
         buf.seek(0)
         image = Image.open(buf).convert("RGB")
         return image
+
+    @staticmethod
+    def _plotly_figure_to_png(fig: BaseFigure) -> bytes:
+        if PlotlyScope is None:
+            return fig.to_image(format="png", engine="kaleido")
+
+        global _PLOTLY_SCOPE
+        try:
+            with _PLOTLY_SCOPE_LOCK:
+                if _PLOTLY_SCOPE is None:
+                    _PLOTLY_SCOPE = PlotlyScope()
+                scope = _PLOTLY_SCOPE
+                return scope.transform(fig.to_dict(), format="png")
+        except Exception as exc:  # pragma: no cover - defensive fallback
+            logging.getLogger(__name__).warning(
+                "PlotlyScope transform failed (%s); falling back to fig.to_image.",
+                exc,
+            )
+            return fig.to_image(format="png", engine="kaleido")
 
     @staticmethod
     def _image_from_png(png: Path | str) -> Image.Image:
@@ -385,10 +426,13 @@ class toy_GPT:
         return response.output_text
 
 class GPT(VisionLLMBase):
-    def __init__(self, api_key, model_name="gpt-4-vision-preview"):
+    def __init__(self, api_key, model_name="gpt-4-vision-preview", base_url = ""):
         super().__init__(model_name)
         self.api_key = api_key
-        self.client = OpenAI(api_key=self.api_key)
+        if base_url:
+            self.client = OpenAI(api_key=self.api_key, base_url=base_url)
+        else:
+            self.client = OpenAI(api_key=self.api_key)
 
     def _invoke(self, prompt: str, base64_image: str) -> tuple[Optional[str], Optional[str], Optional[dict]]:
         messages = [
