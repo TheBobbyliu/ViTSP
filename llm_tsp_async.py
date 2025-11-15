@@ -626,7 +626,7 @@ if __name__ == "__main__":
         # 'pla7397.tsp',
         # 'rl11849.tsp',
         # 'usa13509.tsp',
-        'brd14051.tsp',
+        # 'brd14051.tsp',
         'd15112.tsp',
         # 'd18512.tsp',
         # 'pla33810.tsp',

@@ -608,7 +608,7 @@ def subproblem_solver(subproblem, config):
     # ---------------------------------
     # hill-climbing acceptance criteria
     # ---------------------------------
-    with config.obj_lock, config.sol_lock:
+    with config.sol_lock, config.obj_lock:
         # if subproblem.solution_version != config.global_obj.value:
         #     log.info("Find different version of solution")
         # elif subproblem.solution_version == config.global_obj.value:
@@ -806,8 +806,7 @@ def subproblem_verifier(subproblem, config):
     # ---------------------------------
     # hill-climbing acceptance criteria
     # ---------------------------------
-    with config.obj_lock, config.sol_lock:
-        
+    with config.sol_lock, config.obj_lock:
         delta_obj = new_obj - config.global_obj.value
 
         if delta_obj < 0:
