@@ -2,32 +2,43 @@ from queue import Empty
 import multiprocessing as mp
 
 class SemaphoreQueue:
-    """Portable mp.Queue wrapper with an item-count semaphore."""
+    """Portable mp.Queue wrapper with an item-count semaphore. (to be compatible with macbook)"""
     def __init__(self, maxsize: int | None = None):
         size = 0 if maxsize in (None, 0) else maxsize
         self._queue = mp.Queue(size)
         self._sem = mp.Semaphore(0)
+        # for counting
+        self._count = mp.Value("i", 0)
 
     def put(self, item) -> None:
         self._queue.put(item)
+        with self._count.get_lock():
+            self._count.value += 1
         self._sem.release()
 
     def get(self, block: bool = True, timeout: float | None = None):
         if not self._sem.acquire(block, timeout=timeout):
             raise Empty
         try:
-            return self._queue.get_nowait()
+            obj = self._queue.get_nowait()
+            with self._count.get_lock():
+                self._count.value -= 1
+            return obj
         except Exception:
             self._sem.release()
             return None
 
     def get_nowait(self):
-        return self.get(block=False)
+        obj = self.get(block=False)
+        return obj
 
     def try_get(self):
         if self._sem.acquire(False):
             try:
-                return self._queue.get_nowait()
+                obj = self._queue.get_nowait()
+                with self._count.get_lock():
+                    self._count.value -= 1
+                return obj
             except Exception:
                 self._sem.release()
                 return None
@@ -48,3 +59,6 @@ class SemaphoreQueue:
 
     def __getattr__(self, name):
         return getattr(self._queue, name)
+    
+    def size(self) -> int:
+        return self._count.value

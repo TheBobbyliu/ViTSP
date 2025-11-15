@@ -30,10 +30,7 @@ try:
 except ImportError:  # pragma: no cover - optional dependency
     Anthropic = None
 
-try:
-    from kaleido.scopes.plotly import PlotlyScope
-except ImportError:  # pragma: no cover - optional dependency
-    PlotlyScope = None
+import plotly.io as pio
 
 try:
     from matplotlib.figure import Figure as MPLFigure
@@ -49,7 +46,6 @@ MODEL_TYPES = {
 }
 
 _PLOTLY_SCOPE_LOCK = threading.Lock()
-_PLOTLY_SCOPE: Optional["PlotlyScope"] = None
 
 
 class LLMRecorder:
@@ -262,22 +258,15 @@ class VisionLLMBase:
 
     @staticmethod
     def _plotly_figure_to_png(fig: BaseFigure) -> bytes:
-        if PlotlyScope is None:
-            return fig.to_image(format="png", engine="kaleido")
+        """
+        Convert a Plotly figure to PNG bytes using the public Plotly API.
 
-        global _PLOTLY_SCOPE
-        try:
-            with _PLOTLY_SCOPE_LOCK:
-                if _PLOTLY_SCOPE is None:
-                    _PLOTLY_SCOPE = PlotlyScope()
-                scope = _PLOTLY_SCOPE
-                return scope.transform(fig.to_dict(), format="png")
-        except Exception as exc:  # pragma: no cover - defensive fallback
-            logging.getLogger(__name__).warning(
-                "PlotlyScope transform failed (%s); falling back to fig.to_image.",
-                exc,
-            )
-            return fig.to_image(format="png", engine="kaleido")
+        We keep a global lock because the Kaleido backend is not fully
+        thread-safe under heavy multithreading.
+        """
+        with _PLOTLY_SCOPE_LOCK:
+            # Let Plotly manage Kaleido internally; no manual scope usage.
+            return fig.to_image(format="png")
 
     @staticmethod
     def _image_from_png(png: Path | str) -> Image.Image:

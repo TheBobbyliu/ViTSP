@@ -363,10 +363,14 @@ def process_subTSP(args, task, tsp_instance, current_route, current_obj, result_
         task.solver_latency = 0.0
         task.gain = 0
 
-    try:
-        result_queue.put(task, block=False)
-    except queue.Full:
-        logger.warning("Result queue is full, dropping task %s result", task.id)
+    while True:
+        try:
+            result_queue.put(task)
+            break
+        except queue.Full:
+            logger.warning("Result queue is full, waiting for retry: %s", task.id)
+            time.sleep(0.5)
+
 
 
 def format_task_traj(task):
@@ -380,10 +384,10 @@ def format_task_traj(task):
         f"computation time for this subrectangle={round(task.solver_latency, 2)} sec \n"
     )
 
-def sample_independent_subproblem(config, active_subproblems, gain_subproblem_queue, subproblem_re_queue, subproblem_ft_queue, traj_lock, current_route):
+def sample_independent_subproblem(config, active_subproblems, gain_subproblem_queue, subproblem_re_queue, subproblem_ft_queue, traj_lock, current_route, logger=None):
 
     queues_with_priority = [gain_subproblem_queue, subproblem_re_queue, subproblem_ft_queue]
-    for queue in queues_with_priority:
+    for i, queue in enumerate(queues_with_priority):
         temp_buffer = []
         selected_subproblem = None
 
@@ -391,16 +395,12 @@ def sample_independent_subproblem(config, active_subproblems, gain_subproblem_qu
             subproblem = queue.try_get()
             if subproblem is None:
                 break
-            # edited
-            # try:
-            #     subproblem = queue.get_nowait()
-            # except Empty:
-            #     break # does this put the subproblem back to the queue?
             
             # TODO: a subproblem can include multiple removed_nodes 
             if all(subproblems_are_independent(active_sp, subproblem, config, current_route) for active_sp in active_subproblems):
                 selected_subproblem = subproblem
-                print('Retrieved valid subproblems')
+                if logger:
+                    logger.info('Retrieved valid subproblems from queue (gain:0, reason:1, fast:2): %d', i)
                 break
             else:
                 temp_buffer.append(subproblem)
@@ -559,16 +559,13 @@ def subproblem_solver(subproblem, config):
     completed_processes = 0
     num_processes = len(tasks)
 
+    # break: If no workers are alive anymore, or completed processes reached
     while completed_processes < num_processes:
-        try:
-            task = result_queue.get(timeout=0.5)
-        except Empty:
-            # If no workers are alive anymore, break to avoid spinning forever.
+        task = result_queue.try_get()
+        if task is None:
             if not any(proc.is_alive() for proc in processes):
                 break
-            continue
-
-        if task is None:
+            time.sleep(0.2)
             continue
 
         results.append(task)
@@ -772,15 +769,13 @@ def subproblem_verifier(subproblem, config):
     completed_processes = 0
     num_processes = len(tasks)
 
+    # break: If no workers are alive anymore, or completed processes reached
     while completed_processes < num_processes:
-        try:
-            task = result_queue.get(timeout=0.5)
-        except Empty:
+        task = result_queue.try_get()
+        if task is None:
             if not any(proc.is_alive() for proc in processes):
                 break
-            continue
-
-        if task is None:
+            time.sleep(0.2)
             continue
 
         results.append(task)
@@ -791,8 +786,6 @@ def subproblem_verifier(subproblem, config):
         if proc.is_alive():
             proc.terminate()
             proc.join()
-
-    log.info('Time spent in multiprocessing subTSPs: %f', time.time() - start_time)
 
     if results:
         gain_tasks, no_impr_tasks = evaluate_best_gain(results, current_obj)

@@ -6,6 +6,8 @@
 @Author:XXXX-6
 @Contact: XXXX-1@XXXX-7.edu
 '''
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.patches as patches
@@ -277,5 +279,4 @@ def generate_routes(solution):
             current_route = [0]
 
     return routes
-
 

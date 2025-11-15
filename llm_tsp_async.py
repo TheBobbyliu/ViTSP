@@ -67,13 +67,18 @@ def _reap_finished(active_processes: Dict[mp.Process, "Subproblem"]):
 def dynamic_worker_manager(config):
     _configure_logging('worker')
     logger = logging.getLogger()
-    # logger = logging.getLogger(__name__)
     active_processes: Dict[mp.Process, "Subproblem"] = {}
     try:
+        time_current = time.time()
         while time.time() < config.deadline:
             _reap_finished(active_processes)
             if len(active_processes) >= 1:
-                time.sleep(0.1)
+                time.sleep(0.2)
+                # record current workers
+                time_now = time.time()
+                if time_now > time_current + 10:
+                    logger.info("Active workers = %d", len(active_processes))
+                    time_current = time_now
                 continue
 
             with config.sol_lock, config.obj_lock:
@@ -88,9 +93,14 @@ def dynamic_worker_manager(config):
                 subproblem_ft_queue=config.pending_ft_subproblem_queue,
                 traj_lock=config.traj_lock,
                 current_route=current_route,
+                logger=logger
             )
 
             if subproblem is None:
+                time_now = time.time()
+                if time_now > time_current + 10:
+                    logger.info("No available subproblems right now...")
+                    time_current = time_now
                 time.sleep(0.2)
                 continue
 
@@ -102,7 +112,7 @@ def dynamic_worker_manager(config):
             )
             proc.start()
             active_processes[proc] = subproblem
-            logger.debug("Launched %s (alive=%d)", subproblem.solution_version, len(active_processes))
+            logger.info("Launched %s (alive=%d)", subproblem.solution_version, len(active_processes))
     finally:
         for proc in list(active_processes.keys()):
             proc.join()
@@ -300,8 +310,9 @@ def main(args):
         os.makedirs(exp_dir)
     exp_path = Path(exp_dir)
 
-    _configure_logging()
+    _configure_logging("main")
     log = logging.getLogger()
+    log.info("======= Start working on %s", args.instance_path)
     tsp_instance, boundary_info = tsp_instance_initializer(args)
     X_MIN, X_MAX, Y_MIN, Y_MAX, GRID_RES = boundary_info 
 
@@ -447,12 +458,11 @@ def main(args):
     n_cpus = mp.cpu_count()  # e.g. 48
     llm1_core = [0, 1]  # one core for each LLM producer
     llm2_core = [2, 3]
-    # solver_cores = list(range(4, n_cpus))  # the rest for Concorde
+    solver_cores = list(range(4, n_cpus))  # the rest for Concorde
 
     reasoning_llm_proc.start()
     fast_thinking_llm_proc.start()
     dynamic_solver_proc.start()
-    
     verifier_proc.start()
 
     # time.sleep(5)
@@ -462,9 +472,20 @@ def main(args):
     pin(reasoning_llm_proc, llm2_core)
 
     # dynamic_solver_proc.join()
-    dynamic_solver_proc.join(timeout=args.total_time_budget + 10)
+    while time.time() < deadline + 10:
+        if not dynamic_solver_proc.is_alive():
+            break
+        log.info("Time remaining: %d, gain queue: %d, pending fast llm queue: %d, pending reason llm queue: %d, track global obj queue: %d",
+                    max(0, int(deadline - time.time())), 
+                    gain_subproblem_queue.size(), 
+                    pending_ft_subproblem_queue.size(), 
+                    pending_re_subproblem_queue.size(), 
+                    track_global_obj_queue.size())
+        time.sleep(5)
+        
+    # dynamic_solver_proc.join(timeout=args.total_time_budget + 10)
     if dynamic_solver_proc.is_alive():
-        print("dynamic_solver_proc is stuck!")
+        log.error("dynamic_solver_proc is stuck, kill.")
         dynamic_solver_proc.terminate()
         dynamic_solver_proc.join()
 
@@ -480,23 +501,23 @@ def main(args):
     csv_path = exp_path / f"{instance_name}_{suffix}.csv"
 
     df = dump_global_obj_queue(track_global_obj_queue, csv_path)
-    print("Saved", len(df), "records")
+    log.info("Saved %d records", len(df))
     
     verifier_proc.join(timeout=5)
     if verifier_proc.is_alive():
-        print("verifier_proc is stuck!")
+        log.error("verifier_proc is stuck!")
         verifier_proc.terminate()
         verifier_proc.join()
     
     reasoning_llm_proc.join(timeout=5)
     if reasoning_llm_proc.is_alive():
-        print("reasoning_llm_proc is stuck!")
+        log.error("reasoning_llm_proc is stuck!")
         reasoning_llm_proc.terminate()
         reasoning_llm_proc.join()
 
     fast_thinking_llm_proc.join(timeout=5)
     if fast_thinking_llm_proc.is_alive():
-        print("fast_thinking_llm_proc is stuck!")
+        log.error("fast_thinking_llm_proc is stuck!")
         fast_thinking_llm_proc.terminate()
         fast_thinking_llm_proc.join()
 
@@ -509,19 +530,7 @@ def main(args):
         Path(args.instance_path).name,
         len(tsp_instance.node_coord_dict),
     )
-    print(f"Saved trace to {trace_path}")
-
-    # instance_name = Path(args.instance_path).stem
-
-    # df = dump_global_obj_queue(track_global_obj_queue,
-    #                         f'/local/scratch/a/XXXX-1/vllm-carbon-XXXX-5/LLM-TSP-async/experiments/LLM_TSP_exp/{instance_name}_max_nodes_{args.max_node_for_solver}_time_budget_{args.total_time_budget}_initial_{args.initial_solution_model}_llm_{args.fast_llm_model}_{args.reasoning_llm_model}_solver_{args.solver_model}_subproblem_{args.llm_subproblem_selection}_parallel_workers.csv')
-    # print("Saved", len(df), "records")
-
-    # fast_llm_proc.join()
-    # dynamic_solver_proc.join()
-    
-    # # reasoning_llm_proc.join()
-    # print('complete')
+    log.info(f"Saved trace to %s", trace_path)
 
 
 if __name__ == "__main__":
