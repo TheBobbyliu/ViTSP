@@ -447,11 +447,11 @@ class GPT(VisionLLMBase):
 
         try:
             if 'gpt-5' in self.model_name:
-                print("reasoning effort: medium")
+                print("reasoning effort: minimal")
                 response = self.client.chat.completions.create(
                     model=self.model_name,
                     messages=messages,
-                    # reasoning_effort='minimal'
+                    reasoning_effort='minimal'
                 )
             else:
                 response = self.client.chat.completions.create(
