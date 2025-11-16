@@ -542,7 +542,7 @@ if __name__ == "__main__":
     parser.add_argument('--max_iterations', type=int, default=5,
     # parser.add_argument('--max_iterations', type=int, default=1,
                         help='Maximum number of iterations for optimization')
-    parser.add_argument('--total_time_budget', type=float, default=3000,
+    parser.add_argument('--total_time_budget', type=float, default=5000,
     # parser.add_argument('--total_time_budget', type=float, default=3000,
                         help='Wall time in seconds')
     parser.add_argument('--max_workers', type=int, default=4,
