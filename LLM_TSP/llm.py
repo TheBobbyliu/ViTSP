@@ -239,22 +239,22 @@ class VisionLLMBase:
             """
         ).strip()
 
-        prompt = textwrap.dedent(
-            f"""
-            You are tasked with improving an existing solution to a Traveling Salesman Problem (TSP) by selecting a sub-region where the routes can be significantly optimized.
-            Carefully consider the locations of the nodes (in red) and connected routes (in black) in the initial solution on a map. The boundary of the map is x_min={x_min-x_delta}, x_max={x_max+x_delta}, y_min={y_min-y_delta}, y_max={y_max+y_delta}.
-            Please return {num_region_text} non-overlapping sub-rectangle(s) that you believe would most reduce total travel distance from further optimization by a downstream TSP solver.
-            Analyze the problem-specific distribution to do meaningful selection. Select areas as large as you could to cover more nodes, which can bring larger improvement. Remember, if you don't see significant improvement, try selecting larger areas that cover more nodes based on your analysis of the prior selection trajectory
-            Keep your output very brief as the following template, and make the justification right after output the coordinates. Don't tell me you cannot view or analyze the map. I don't want an excuse:
-            <coordinates> x_min= 1,000, x_max= 2,000, y_min= 1,000, y_max=2,000 </coordinates>
+        # prompt = textwrap.dedent(
+        #     f"""
+        #     You are tasked with improving an existing solution to a Traveling Salesman Problem (TSP) by selecting a sub-region where the routes can be significantly optimized.
+        #     Carefully consider the locations of the nodes (in red) and connected routes (in black) in the initial solution on a map. The boundary of the map is x_min={x_min-x_delta}, x_max={x_max+x_delta}, y_min={y_min-y_delta}, y_max={y_max+y_delta}.
+        #     Please return {num_region_text} non-overlapping sub-rectangle(s) that you believe would most reduce total travel distance from further optimization by a downstream TSP solver.
+        #     Analyze the problem-specific distribution to do meaningful selection. Select areas as large as you could to cover more nodes, which can bring larger improvement. Remember, if you don't see significant improvement, try selecting larger areas that cover more nodes based on your analysis of the prior selection trajectory
+        #     Keep your output very brief as the following template, and make the justification right after output the coordinates. Don't tell me you cannot view or analyze the map. I don't want an excuse:
+        #     <coordinates> x_min= 1,000, x_max= 2,000, y_min= 1,000, y_max=2,000 </coordinates>
 
-            Avoid selecting the same regions as follows, which are pending optimization:
-            {pending_regions}
+        #     Avoid selecting the same regions as follows, which are pending optimization:
+        #     {pending_regions}
 
-            Below are some previous selection trajectory. Learn from the trajectory to improve your selection capability. Please avoid selecting the same subrectangle.
-            {prior_selection}
-            """
-        ).strip()
+        #     Below are some previous selection trajectory. Learn from the trajectory to improve your selection capability. Please avoid selecting the same subrectangle.
+        #     {prior_selection}
+        #     """
+        # ).strip()
         return prompt, num_region_text, num_region
 
     @staticmethod
