@@ -2,9 +2,17 @@
 
 ## ViTSP
 Use `LLM_TSP/llm_tsp_async.py` as the main code for ViTSP.
-The ViTSP needs an OpenAI API key, Concorde, and LKH-3.
+
+You can refer to `run_llm_tsp.sh`.
+
+The ViTSP needs an OpenAI API key, Concorde, and LKH-3, so create a `.env` file first:
+```
+# .env
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+```
 
 Before running, it's better to set `ulimit -n 4096` to avoid error of `open too many files`
+
 
 ## Concorde
 

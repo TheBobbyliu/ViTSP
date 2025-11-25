@@ -2,7 +2,7 @@
 """Generate heatmaps that summarize LLM selection frequencies on a 100x100 grid."""
 
 from __future__ import annotations
-
+import os
 import argparse
 import json
 import logging
@@ -18,6 +18,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+try:
+    from PIL import Image
+except ImportError:  # pragma: no cover - Pillow is optional
+    Image = None
 
 DEFAULT_GRID_SIZE = 100
 
@@ -46,6 +50,12 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=DEFAULT_GRID_SIZE,
         help="Number of bins per axis for the heatmap (default: 100)",
+    )
+    parser.add_argument(
+        "--ticks-per-axis",
+        type=int,
+        default=0,
+        help="Optional number of ticks per axis to mirror the original figure layout",
     )
     parser.add_argument(
         "--records-root",
@@ -121,40 +131,9 @@ def normalize_rectangle(raw: object) -> Optional[Tuple[float, float, float, floa
     return None
 
 
-def resolve_sample_image_hint(image_hint: str, records_dir: Path, repo_root: Path, json_path: Path) -> Optional[Path]:
-    """Attempt to locate the sample image referenced inside a JSON payload."""
-
-    raw_path = Path(image_hint)
-    candidates: List[Path] = []
-    seen: set[Path] = set()
-
-    def add_candidate(path: Path) -> None:
-        if path in seen:
-            return
-        seen.add(path)
-        candidates.append(path)
-
-    if raw_path.is_absolute():
-        add_candidate(raw_path)
-    else:
-        add_candidate(repo_root / raw_path)
-        add_candidate(records_dir.parent / raw_path)
-        add_candidate(records_dir / raw_path)
-        add_candidate(json_path.parent / raw_path)
-
-    for candidate in candidates:
-        if candidate.exists():
-            return candidate.resolve()
-
-    logging.debug("Unable to resolve sample image '%s' relative to %s", image_hint, json_path)
-    return None
-
-
 def collect_records(
     json_files: Iterable[Path],
-    task_filter: str,
-    records_dir: Path,
-    repo_root: Path,
+    task_filter: str
 ) -> Tuple[List[SelectionRecord], Tuple[float, float, float, float], Optional[Path]]:
     records: List[SelectionRecord] = []
     x_min = math.inf
@@ -187,14 +166,11 @@ def collect_records(
 
         rectangles: List[Tuple[float, float, float, float]] = []
         for entry in coords:
-            rect = normalize_rectangle(entry)
+            # rect = normalize_rectangle(entry)
+            rect = [entry[0], entry[2], entry[1], entry[3]]
             if rect is None:
                 continue
             rectangles.append(rect)
-            x_min = min(x_min, rect[0])
-            y_min = min(y_min, rect[1])
-            x_max = max(x_max, rect[2])
-            y_max = max(y_max, rect[3])
 
         if not rectangles:
             continue
@@ -202,10 +178,16 @@ def collect_records(
         if sample_image_path is None:
             image_hint = payload.get("image_path") or payload.get("selection_figure")
             if isinstance(image_hint, str):
-                sample_image_path = resolve_sample_image_hint(image_hint, records_dir, repo_root, path)
+                import os
+                sample_image_path = os.path.dirname(path) + "/../images/" + os.path.basename(image_hint)
+                if not os.path.exists(sample_image_path):
+                    sample_image_path = None
+                    print(sample_image_path, "not exists")
+                else:
+                    sample_image_path = Path(sample_image_path)
 
         bounds = payload.get("bounds")
-        if isinstance(bounds, dict):
+        if isinstance(bounds, dict) and x_min == math.inf:
             x_min = min(x_min, float(bounds.get("x_min", x_min)))
             x_max = max(x_max, float(bounds.get("x_max", x_max)))
             y_min = min(y_min, float(bounds.get("y_min", y_min)))
@@ -237,6 +219,44 @@ def collect_records(
         raise ValueError("No valid records or bounds found for the given task")
 
     return records, (x_min, x_max, y_min, y_max), sample_image_path
+
+
+def derive_image_bounds(image_path: Optional[Path]) -> Optional[Tuple[float, float, float, float]]:
+    """Return (x_min, x_max, y_min, y_max) based on the raw image size if available."""
+
+    if Image is None or image_path is None:
+        return None
+    try:
+        with Image.open(image_path) as img:
+            width, height = img.size
+    except Exception as exc:  # noqa: BLE001
+        logging.warning("Unable to read bounds from %s: %s", image_path, exc)
+        return None
+    return (0.0, float(width), 0.0, float(height))
+
+
+def align_bounds_with_image(
+    bounds: Tuple[float, float, float, float],
+    sample_image: Optional[Path],
+) -> Tuple[float, float, float, float]:
+    """Expand parsed bounds so axes line up with the original image coordinates."""
+
+    image_bounds = derive_image_bounds(sample_image)
+    if image_bounds is None:
+        return bounds
+
+    x_min, x_max, y_min, y_max = bounds
+    img_x_min, img_x_max, img_y_min, img_y_max = image_bounds
+    merged = (
+        min(x_min, img_x_min),
+        max(x_max, img_x_max),
+        min(y_min, img_y_min),
+        max(y_max, img_y_max),
+    )
+
+    if merged != bounds:
+        logging.info("Expanded bounds to image extent: %s -> %s", bounds, merged)
+    return merged
 
 
 def value_to_index(value: float, min_bound: float, bound_range: float, grid_size: int, is_upper: bool) -> int:
@@ -290,23 +310,64 @@ def sanitize_name(value: str) -> str:
     return re.sub(r"[^0-9A-Za-z._-]+", "_", value.strip())
 
 
+def compute_tick_steps(
+    bounds: Tuple[float, float, float, float],
+    grid_size: int,
+    ticks_per_axis: int,
+) -> Tuple[int, int]:
+    """Mirror the tick spacing heuristic used in plot_tsp_solution_plotly for consistent layouts."""
+
+    x_min, x_max, y_min, y_max = bounds
+    x_span = max(x_max - x_min, 1.0)
+    y_span = max(y_max - y_min, 1.0)
+
+    if ticks_per_axis > 0:
+        grid_res_x = max(int(math.ceil(x_span / ticks_per_axis)), 1)
+        grid_res_y = max(int(math.ceil(y_span / ticks_per_axis)), 1)
+    else:
+        pseudo_nodes = max(grid_size * grid_size, 1)
+        divisor = max(int(math.ceil(math.sqrt(pseudo_nodes / 100))), 2)
+        grid_res_x = max(int(x_span // divisor), 1)
+        grid_res_y = max(int(y_span // divisor), 1)
+
+    return grid_res_x, grid_res_y
+
+
 def save_heatmap(
     data: np.ndarray,
     title: str,
     output_path: Path,
-    extent: Tuple[float, float, float, float],
+    bounds: Tuple[float, float, float, float],
     dpi: int,
     cmap: str,
+    grid_size: int,
+    ticks_per_axis: int,
 ) -> None:
-    plt.figure(figsize=(7, 6))
-    plt.imshow(data, origin="lower", extent=extent, cmap=cmap)
-    plt.colorbar(label=title)
-    plt.title(title)
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.tight_layout()
-    plt.savefig(output_path, dpi=dpi)
-    plt.close()
+    
+    parent = os.path.dirname(output_path)
+    if not os.path.exists(parent):
+        os.makedirs(parent)
+
+    x_min, x_max, y_min, y_max = bounds
+    tick_step_x, tick_step_y = compute_tick_steps(bounds, grid_size, ticks_per_axis)
+
+    fig, ax = plt.subplots(figsize=(24, 20))  # Smaller figure size for faster rendering
+    heatmap = ax.imshow(data, origin="lower", extent=(x_min, x_max, y_min, y_max), cmap=cmap, aspect="auto")
+    ax.set_xlim(x_min, x_max)
+    ax.set_ylim(y_min, y_max)
+    ax.set_xticks(np.arange(x_min - 10, x_max - 10, tick_step_x))
+    ax.set_yticks(np.arange(y_min - 10, y_max + 10, tick_step_y))
+    # ax.set_xticks(np.arange(x_min, x_max + tick_step_x, tick_step_x))
+    # ax.set_yticks(np.arange(y_min, y_max + tick_step_y, tick_step_y))
+    ax.tick_params(axis='x', rotation=45, labelsize=25)
+    ax.tick_params(axis='y', rotation=0, labelsize=25)
+    ax.set_xlabel("X Coordinate", fontsize=25)
+    ax.set_ylabel("Y Coordinate", fontsize=25)
+    # ax.set_title(title)
+    fig.colorbar(heatmap, ax=ax, label=title)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
     logging.info("Saved %s", output_path)
 
 
@@ -342,7 +403,9 @@ def main() -> None:
     if not json_files:
         raise FileNotFoundError(f"No JSON records found under {records_dir}")
 
-    records, bounds, sample_image = collect_records(json_files, args.taskname, records_dir, repo_root)
+    records, bounds, sample_image = collect_records(json_files, args.taskname)
+    # edited - no expansion
+    # bounds = align_bounds_with_image(bounds, sample_image)
     freq_all, freq_with_delta, freq_improved, objective_delta_sum = accumulate_heatmaps(
         records, bounds, args.grid_size
     )
@@ -350,43 +413,50 @@ def main() -> None:
     output_dir = ensure_output_dir(repo_root, args.output_dir)
     safe_model = sanitize_name(args.modelname)
     safe_task = sanitize_name(args.taskname)
-    base_name = f"{safe_model}_{safe_task}"
-    extent = (bounds[0], bounds[1], bounds[2], bounds[3])
+    base_name = f"{safe_task}"
 
     save_heatmap(
         freq_all,
         "Selection frequency (all)",
-        output_dir / f"{base_name}_freq_all.png",
-        extent,
+        output_dir / safe_model / f"{base_name}_freq_all.png",
+        bounds,
         args.dpi,
         cmap="viridis",
+        grid_size=args.grid_size,
+        ticks_per_axis=args.ticks_per_axis,
     )
     save_heatmap(
         freq_with_delta,
         "Selection frequency (objective delta available)",
-        output_dir / f"{base_name}_freq_with_delta.png",
-        extent,
+        output_dir / safe_model / f"{base_name}_freq_with_delta.png",
+        bounds,
         args.dpi,
         cmap="viridis",
+        grid_size=args.grid_size,
+        ticks_per_axis=args.ticks_per_axis,
     )
     save_heatmap(
         freq_improved,
         "Selection frequency (improved objective)",
-        output_dir / f"{base_name}_freq_improved.png",
-        extent,
+        output_dir / safe_model / f"{base_name}_freq_improved.png",
+        bounds,
         args.dpi,
         cmap="viridis",
+        grid_size=args.grid_size,
+        ticks_per_axis=args.ticks_per_axis,
     )
     save_heatmap(
         objective_delta_sum,
         "Sum of objective_delta (improved objective)",
-        output_dir / f"{base_name}_objective_delta_sum.png",
-        extent,
+        output_dir / safe_model / f"{base_name}_objective_delta_sum.png",
+        bounds,
         args.dpi,
         cmap="coolwarm",
+        grid_size=args.grid_size,
+        ticks_per_axis=args.ticks_per_axis,
     )
 
-    copy_sample_image(sample_image, output_dir, base_name)
+    copy_sample_image(sample_image, output_dir / safe_model, base_name)
 
 
 if __name__ == "__main__":

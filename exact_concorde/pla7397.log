@@ -1,0 +1,916 @@
+[WARNING] CuPy not found. Falling back to NumPy.
+Problem Name: Pseudo_TSP_Instance
+Problem Type: TSP
+Number of Nodes: 7397
+Rounded Euclidean Norm (CC_EUCLIDEAN)
+CCtsp_solve_dat ...
+Finding a good tour for compression ...
+linkern ...
+Starting Cycle: 27464452
+   0 Steps   Best: 24248815   0.03 seconds
+   1 Steps   Best: 24240215   0.03 seconds
+   2 Steps   Best: 24174493   0.03 seconds
+   4 Steps   Best: 24170847   0.03 seconds
+   9 Steps   Best: 24169191   0.03 seconds
+  10 Steps   Best: 24166581   0.03 seconds
+  12 Steps   Best: 23834596   0.03 seconds
+  13 Steps   Best: 23752477   0.04 seconds
+  15 Steps   Best: 23749119   0.04 seconds
+  18 Steps   Best: 23749041   0.04 seconds
+  20 Steps   Best: 23748350   0.04 seconds
+  22 Steps   Best: 23747855   0.04 seconds
+  23 Steps   Best: 23746044   0.04 seconds
+  24 Steps   Best: 23740437   0.04 seconds
+  25 Steps   Best: 23723962   0.04 seconds
+  29 Steps   Best: 23722653   0.04 seconds
+  37 Steps   Best: 23712198   0.05 seconds
+  43 Steps   Best: 23710705   0.05 seconds
+  44 Steps   Best: 23710688   0.05 seconds
+  50 Steps   Best: 23710312   0.05 seconds
+  52 Steps   Best: 23698076   0.05 seconds
+  55 Steps   Best: 23697986   0.05 seconds
+  57 Steps   Best: 23688026   0.05 seconds
+  64 Steps   Best: 23687445   0.05 seconds
+  67 Steps   Best: 23686659   0.06 seconds
+  71 Steps   Best: 23683698   0.06 seconds
+  76 Steps   Best: 23680090   0.06 seconds
+  78 Steps   Best: 23678992   0.06 seconds
+  80 Steps   Best: 23677968   0.06 seconds
+  86 Steps   Best: 23665648   0.06 seconds
+  87 Steps   Best: 23665366   0.06 seconds
+  93 Steps   Best: 23664402   0.07 seconds
+  95 Steps   Best: 23662746   0.07 seconds
+ 100 Steps   Best: 23661503   0.07 seconds
+ 102 Steps   Best: 23657047   0.07 seconds
+ 103 Steps   Best: 23636478   0.07 seconds
+ 112 Steps   Best: 23635904   0.07 seconds
+ 132 Steps   Best: 23634002   0.08 seconds
+ 133 Steps   Best: 23632742   0.08 seconds
+ 137 Steps   Best: 23628578   0.08 seconds
+ 142 Steps   Best: 23628143   0.08 seconds
+ 147 Steps   Best: 23626979   0.08 seconds
+ 150 Steps   Best: 23625323   0.08 seconds
+ 154 Steps   Best: 23623123   0.09 seconds
+ 169 Steps   Best: 23622183   0.09 seconds
+ 186 Steps   Best: 23621385   0.10 seconds
+ 191 Steps   Best: 23620234   0.10 seconds
+ 194 Steps   Best: 23618582   0.10 seconds
+ 195 Steps   Best: 23616008   0.10 seconds
+ 206 Steps   Best: 23610637   0.10 seconds
+ 220 Steps   Best: 23609079   0.11 seconds
+ 221 Steps   Best: 23607328   0.11 seconds
+ 225 Steps   Best: 23606326   0.11 seconds
+ 230 Steps   Best: 23599216   0.11 seconds
+ 236 Steps   Best: 23593703   0.11 seconds
+ 240 Steps   Best: 23589779   0.11 seconds
+ 255 Steps   Best: 23589098   0.12 seconds
+ 268 Steps   Best: 23589084   0.12 seconds
+ 289 Steps   Best: 23586256   0.13 seconds
+ 294 Steps   Best: 23577123   0.13 seconds
+ 296 Steps   Best: 23576674   0.13 seconds
+ 298 Steps   Best: 23576210   0.13 seconds
+ 301 Steps   Best: 23574370   0.13 seconds
+ 302 Steps   Best: 23572760   0.13 seconds
+ 310 Steps   Best: 23572689   0.14 seconds
+ 312 Steps   Best: 23572665   0.14 seconds
+ 314 Steps   Best: 23571465   0.14 seconds
+ 318 Steps   Best: 23570506   0.14 seconds
+ 327 Steps   Best: 23522606   0.14 seconds
+ 343 Steps   Best: 23522030   0.15 seconds
+ 344 Steps   Best: 23521854   0.15 seconds
+ 351 Steps   Best: 23521736   0.15 seconds
+ 352 Steps   Best: 23521254   0.15 seconds
+ 359 Steps   Best: 23521110   0.15 seconds
+ 391 Steps   Best: 23520217   0.16 seconds
+ 396 Steps   Best: 23519722   0.16 seconds
+ 400 Steps   Best: 23518518   0.16 seconds
+ 404 Steps   Best: 23517125   0.16 seconds
+ 412 Steps   Best: 23514139   0.16 seconds
+ 414 Steps   Best: 23506620   0.16 seconds
+ 417 Steps   Best: 23506249   0.17 seconds
+ 426 Steps   Best: 23506154   0.17 seconds
+ 427 Steps   Best: 23505256   0.17 seconds
+ 464 Steps   Best: 23505128   0.18 seconds
+ 467 Steps   Best: 23498754   0.18 seconds
+ 475 Steps   Best: 23497098   0.18 seconds
+ 486 Steps   Best: 23494762   0.19 seconds
+ 496 Steps   Best: 23492006   0.19 seconds
+ 497 Steps   Best: 23491781   0.19 seconds
+ 500 Total Steps.
+Best cycle length: 23491781
+Lin-Kernighan Running Time: 0.19
+LK Initial Run: 23491781.0
+LK Run 0: 23480170.0
+LK Run from best tour: 23438408.0
+Time to find compression tour: 0.71 (seconds)
+Set initial upperbound to 23438408 (from tour)
+  LP Value  1: 22709193.825000  (0.71 seconds)
+  LP Value  2: 23081303.151786  (1.36 seconds)
+  LP Value  3: 23165736.142179  (2.16 seconds)
+  LP Value  4: 23191480.704105  (3.05 seconds)
+  LP Value  5: 23207414.587551  (4.06 seconds)
+  LP Value  6: 23221642.955763  (5.04 seconds)
+  LP Value  7: 23225475.717869  (6.00 seconds)
+  LP Value  8: 23229665.064728  (7.82 seconds)
+  LP Value  9: 23233461.062719  (8.72 seconds)
+  LP Value 10: 23237195.425727  (10.34 seconds)
+  LP Value 11: 23238834.756474  (12.30 seconds)
+  LP Value 12: 23239562.770460  (13.85 seconds)
+  LP Value 13: 23240483.333532  (15.72 seconds)
+  LP Value 14: 23241350.473554  (17.55 seconds)
+  LP Value 15: 23241964.607214  (19.28 seconds)
+  LP Value 16: 23242287.232439  (21.15 seconds)
+New lower bound: 23242287.232439
+  LP Value  1: 23242476.217887  (23.82 seconds)
+New lower bound: 23242476.217887
+Upperbound from x-heuristic: 23399301.00
+Exact lower bound: 23242476.217887
+DIFF: 0.000001
+LOWER BOUND: 23242476.217887   ACTIVE NODES: 1
+
+Task 0: Branching on node 0
+CClp_getweight ...
+BBnode 0 split into 1 (23242646.46) 2 (23242823.98) (0.95 seconds)
+LOWER BOUND: 23242646.461317   ACTIVE NODES: 2
+
+Task 1: Cutting on node 1
+Writing Pool: 10541 cuts
+BBnode 1 (now 3) done cutting: lowerbound 23245310.16 (24.45 seconds)
+LOWER BOUND: 23242823.982588   ACTIVE NODES: 2
+
+Task 2: Cutting on node 2
+Writing Pool: 12263 cuts
+BBnode 2 (now 4) done cutting: lowerbound 23246152.94 (11.95 seconds)
+LOWER BOUND: 23245310.164427   ACTIVE NODES: 2
+
+Task 3: Branching on node 3
+CClp_getweight ...
+BBnode 3 split into 5 (23245310.16) 6 (23245310.16) (0.62 seconds)
+LOWER BOUND: 23245310.164427   ACTIVE NODES: 3
+
+Task 4: Cutting on node 6
+Writing Pool: 14260 cuts
+BBnode 6 (now 7) done cutting: lowerbound 23247493.18 (16.11 seconds)
+LOWER BOUND: 23245310.164427   ACTIVE NODES: 3
+
+Task 5: Cutting on node 5
+Writing Pool: 16252 cuts
+BBnode 5 (now 8) done cutting: lowerbound 23247726.41 (18.37 seconds)
+LOWER BOUND: 23246152.938837   ACTIVE NODES: 3
+
+Task 6: Branching on node 4
+CClp_getweight ...
+BBnode 4 split into 9 (23246477.74) 10 (23246545.53) (0.68 seconds)
+LOWER BOUND: 23246477.737512   ACTIVE NODES: 4
+
+Task 7: Cutting on node 9
+New upperbound from x-heuristic: 23386772.00
+TOUR FOUND - upperbound is 23386772.00
+Writing Pool: 18584 cuts
+BBnode 9 (now 11) done cutting: lowerbound 23250145.53 (17.18 seconds)
+LOWER BOUND: 23246545.531742   ACTIVE NODES: 4
+
+Task 8: Cutting on node 10
+New upperbound from x-heuristic: 23364086.00
+TOUR FOUND - upperbound is 23364086.00
+Writing Pool: 20434 cuts
+BBnode 10 (now 12) done cutting: lowerbound 23249272.11 (14.93 seconds)
+LOWER BOUND: 23247493.179283   ACTIVE NODES: 4
+
+Task 9: Branching on node 7
+CClp_getweight ...
+BBnode 7 split into 13 (23247934.68) 14 (23250581.49) (1.02 seconds)
+LOWER BOUND: 23247726.413948   ACTIVE NODES: 5
+
+Task 10: Branching on node 8
+CClp_getweight ...
+BBnode 8 split into 15 (23248167.91) 16 (23250815.88) (0.80 seconds)
+LOWER BOUND: 23247934.679283   ACTIVE NODES: 6
+
+Task 11: Cutting on node 13
+Writing Pool: 22016 cuts
+BBnode 13 (now 17) done cutting: lowerbound 23248674.46 (13.97 seconds)
+LOWER BOUND: 23248167.913948   ACTIVE NODES: 6
+
+Task 12: Cutting on node 15
+Writing Pool: 23248 cuts
+BBnode 15 (now 18) done cutting: lowerbound 23248652.18 (9.69 seconds)
+LOWER BOUND: 23248652.179888   ACTIVE NODES: 6
+
+Task 13: Branching on node 18
+CClp_getweight ...
+BBnode 18 split into 19 (23249162.16) 20 (23263769.99) (1.12 seconds)
+LOWER BOUND: 23248674.461100   ACTIVE NODES: 7
+
+Task 14: Branching on node 17
+CClp_getweight ...
+BBnode 17 split into 21 (23251536.19) 22 (23249473.77) (1.10 seconds)
+LOWER BOUND: 23249162.163916   ACTIVE NODES: 8
+
+Task 15: Cutting on node 19
+Writing Pool: 25657 cuts
+BBnode 19 (now 23) done cutting: lowerbound 23250863.49 (23.59 seconds)
+LOWER BOUND: 23249272.114514   ACTIVE NODES: 8
+
+Task 16: Branching on node 12
+CClp_getweight ...
+BBnode 12 split into 24 (23250271.48) 25 (23250104.67) (0.91 seconds)
+LOWER BOUND: 23249473.769545   ACTIVE NODES: 9
+
+Task 17: Cutting on node 22
+Writing Pool: 27700 cuts
+BBnode 22 (now 26) done cutting: lowerbound 23251696.17 (22.63 seconds)
+LOWER BOUND: 23250104.666034   ACTIVE NODES: 9
+
+Task 18: Cutting on node 25
+Writing Pool: 29016 cuts
+BBnode 25 (now 27) done cutting: lowerbound 23252136.62 (11.92 seconds)
+LOWER BOUND: 23250145.534561   ACTIVE NODES: 9
+
+Task 19: Branching on node 11
+CClp_getweight ...
+BBnode 11 split into 28 (23250587.03) 29 (23253503.83) (1.01 seconds)
+LOWER BOUND: 23250271.484063   ACTIVE NODES: 10
+
+Task 20: Cutting on node 24
+New upperbound from x-heuristic: 23343753.00
+TOUR FOUND - upperbound is 23343753.00
+Writing Pool: 31962 cuts
+BBnode 24 (now 30) done cutting: lowerbound 23255975.13 (26.63 seconds)
+LOWER BOUND: 23250581.494098   ACTIVE NODES: 10
+
+Task 21: Cutting on node 14
+Writing Pool: 36096 cuts
+BBnode 14 (now 31) done cutting: lowerbound 23264332.57 (36.82 seconds)
+LOWER BOUND: 23250587.034561   ACTIVE NODES: 10
+
+Task 22: Cutting on node 28
+Writing Pool: 38286 cuts
+BBnode 28 (now 32) done cutting: lowerbound 23255616.02 (24.77 seconds)
+LOWER BOUND: 23250815.882457   ACTIVE NODES: 10
+
+Task 23: Cutting on node 16
+Writing Pool: 41125 cuts
+BBnode 16 (now 33) done cutting: lowerbound 23263781.40 (25.31 seconds)
+LOWER BOUND: 23250863.486739   ACTIVE NODES: 10
+
+Task 24: Branching on node 23
+CClp_getweight ...
+BBnode 23 split into 34 (23251190.14) 35 (23250891.12) (0.85 seconds)
+LOWER BOUND: 23250891.122373   ACTIVE NODES: 11
+
+Task 25: Cutting on node 35
+Writing Pool: 44339 cuts
+BBnode 35 (now 36) done cutting: lowerbound 23253173.30 (34.90 seconds)
+LOWER BOUND: 23251190.136862   ACTIVE NODES: 11
+
+Task 26: Cutting on node 34
+Writing Pool: 46470 cuts
+BBnode 34 (now 37) done cutting: lowerbound 23252619.47 (26.90 seconds)
+LOWER BOUND: 23251536.192877   ACTIVE NODES: 11
+
+Task 27: Cutting on node 21
+Writing Pool: 48604 cuts
+BBnode 21 (now 38) done cutting: lowerbound 23255897.35 (28.22 seconds)
+LOWER BOUND: 23251696.168682   ACTIVE NODES: 11
+
+Task 28: Branching on node 26
+CClp_getweight ...
+BBnode 26 split into 39 (23251805.71) 40 (23251746.82) (0.61 seconds)
+LOWER BOUND: 23251746.823444   ACTIVE NODES: 12
+
+Task 29: Cutting on node 40
+Writing Pool: 50181 cuts
+BBnode 40 (now 41) done cutting: lowerbound 23252610.66 (23.47 seconds)
+LOWER BOUND: 23251805.706561   ACTIVE NODES: 12
+
+Task 30: Cutting on node 39
+Writing Pool: 52224 cuts
+BBnode 39 (now 42) done cutting: lowerbound 23253002.12 (29.63 seconds)
+LOWER BOUND: 23252136.617518   ACTIVE NODES: 12
+
+Task 31: Branching on node 27
+CClp_getweight ...
+BBnode 27 split into 43 (23252542.00) 44 (23252701.85) (1.16 seconds)
+LOWER BOUND: 23252542.004906   ACTIVE NODES: 13
+
+Task 32: Cutting on node 43
+Writing Pool: 57165 cuts
+BBnode 43 (now 45) done cutting: lowerbound 23255643.12 (66.85 seconds)
+LOWER BOUND: 23252610.664867   ACTIVE NODES: 13
+
+Task 33: Branching on node 41
+CClp_getweight ...
+BBnode 41 split into 46 (23252783.78) 47 (23252721.60) (0.97 seconds)
+LOWER BOUND: 23252619.466270   ACTIVE NODES: 14
+
+Task 34: Branching on node 37
+CClp_getweight ...
+BBnode 37 split into 48 (23252619.47) 49 (23252619.47) (0.60 seconds)
+LOWER BOUND: 23252619.466270   ACTIVE NODES: 15
+
+Task 35: Cutting on node 49
+Writing Pool: 58147 cuts
+BBnode 49 (now 50) done cutting: lowerbound 23252852.04 (11.20 seconds)
+LOWER BOUND: 23252619.466270   ACTIVE NODES: 15
+
+Task 36: Cutting on node 48
+Writing Pool: 59122 cuts
+BBnode 48 (now 51) done cutting: lowerbound 23252860.02 (12.26 seconds)
+LOWER BOUND: 23252701.852778   ACTIVE NODES: 15
+
+Task 37: Cutting on node 44
+Writing Pool: 60619 cuts
+BBnode 44 (now 52) done cutting: lowerbound 23253702.59 (20.66 seconds)
+LOWER BOUND: 23252721.596721   ACTIVE NODES: 15
+
+Task 38: Cutting on node 47
+Writing Pool: 62742 cuts
+BBnode 47 (now 53) done cutting: lowerbound 23253691.02 (30.32 seconds)
+LOWER BOUND: 23252783.782718   ACTIVE NODES: 15
+
+Task 39: Cutting on node 46
+Writing Pool: 64344 cuts
+BBnode 46 (now 54) done cutting: lowerbound 23253403.83 (24.44 seconds)
+LOWER BOUND: 23252852.044068   ACTIVE NODES: 15
+
+Task 40: Branching on node 50
+CClp_getweight ...
+BBnode 50 split into 55 (23252852.04) 56 (23252852.04) (0.64 seconds)
+LOWER BOUND: 23252852.044068   ACTIVE NODES: 16
+
+Task 41: Cutting on node 56
+Writing Pool: 65886 cuts
+BBnode 56 (now 57) done cutting: lowerbound 23253824.72 (20.88 seconds)
+LOWER BOUND: 23252852.044068   ACTIVE NODES: 16
+
+Task 42: Cutting on node 55
+Writing Pool: 67499 cuts
+BBnode 55 (now 58) done cutting: lowerbound 23253367.89 (21.06 seconds)
+LOWER BOUND: 23252860.020117   ACTIVE NODES: 16
+
+Task 43: Branching on node 51
+CClp_getweight ...
+BBnode 51 split into 59 (23252860.02) 60 (23252860.02) (0.63 seconds)
+LOWER BOUND: 23252860.020117   ACTIVE NODES: 17
+
+Task 44: Cutting on node 59
+Writing Pool: 67981 cuts
+BBnode 59 (now 61) done cutting: lowerbound 23252886.70 (7.57 seconds)
+LOWER BOUND: 23252860.020117   ACTIVE NODES: 17
+
+Task 45: Cutting on node 60
+Writing Pool: 68473 cuts
+BBnode 60 (now 62) done cutting: lowerbound 23252892.38 (8.04 seconds)
+LOWER BOUND: 23252886.703435   ACTIVE NODES: 17
+
+Task 46: Branching on node 61
+CClp_getweight ...
+BBnode 61 split into 63 (23252886.70) 64 (23252886.70) (0.69 seconds)
+LOWER BOUND: 23252886.703435   ACTIVE NODES: 18
+
+Task 47: Cutting on node 64
+New upperbound from x-heuristic: 23323054.00
+TOUR FOUND - upperbound is 23323054.00
+Writing Pool: 70158 cuts
+BBnode 64 (now 65) done cutting: lowerbound 23254045.96 (24.10 seconds)
+LOWER BOUND: 23252886.703435   ACTIVE NODES: 18
+
+Task 48: Cutting on node 63
+Writing Pool: 72618 cuts
+BBnode 63 (now 66) done cutting: lowerbound 23253930.50 (35.06 seconds)
+LOWER BOUND: 23252892.375961   ACTIVE NODES: 18
+
+Task 49: Branching on node 62
+CClp_getweight ...
+BBnode 62 split into 67 (23253034.31) 68 (23253028.43) (0.88 seconds)
+LOWER BOUND: 23253002.118518   ACTIVE NODES: 19
+
+Task 50: Branching on node 42
+CClp_getweight ...
+BBnode 42 split into 69 (23253183.23) 70 (23253292.99) (0.80 seconds)
+LOWER BOUND: 23253028.430790   ACTIVE NODES: 20
+
+Task 51: Cutting on node 68
+Writing Pool: 76095 cuts
+BBnode 68 (now 71) done cutting: lowerbound 23254369.80 (42.25 seconds)
+LOWER BOUND: 23253034.309179   ACTIVE NODES: 20
+
+Task 52: Cutting on node 67
+Writing Pool: 79328 cuts
+BBnode 67 (now 72) done cutting: lowerbound 23253683.48 (43.51 seconds)
+LOWER BOUND: 23253173.295259   ACTIVE NODES: 20
+
+Task 53: Branching on node 36
+CClp_getweight ...
+BBnode 36 split into 73 (23253173.30) 74 (23253173.30) (0.66 seconds)
+LOWER BOUND: 23253173.295259   ACTIVE NODES: 21
+
+Task 54: Cutting on node 74
+Writing Pool: 82914 cuts
+BBnode 74 (now 75) done cutting: lowerbound 23253994.99 (49.56 seconds)
+LOWER BOUND: 23253173.295259   ACTIVE NODES: 21
+
+Task 55: Cutting on node 73
+Writing Pool: 84415 cuts
+BBnode 73 (now 76) done cutting: lowerbound 23253591.65 (21.96 seconds)
+LOWER BOUND: 23253183.230573   ACTIVE NODES: 21
+
+Task 56: Cutting on node 69
+Writing Pool: 86700 cuts
+BBnode 69 (now 77) done cutting: lowerbound 23254201.82 (35.68 seconds)
+LOWER BOUND: 23253292.985512   ACTIVE NODES: 21
+
+Task 57: Cutting on node 70
+Writing Pool: 89706 cuts
+BBnode 70 (now 78) done cutting: lowerbound 23255177.97 (45.77 seconds)
+LOWER BOUND: 23253367.889543   ACTIVE NODES: 21
+
+Task 58: Branching on node 58
+CClp_getweight ...
+BBnode 58 split into 79 (23253367.89) 80 (23253367.89) (0.66 seconds)
+LOWER BOUND: 23253367.889543   ACTIVE NODES: 22
+
+Task 59: Cutting on node 80
+Writing Pool: 91924 cuts
+BBnode 80 (now 81) done cutting: lowerbound 23253748.97 (37.04 seconds)
+LOWER BOUND: 23253367.889543   ACTIVE NODES: 22
+
+Task 60: Cutting on node 79
+Writing Pool: 94827 cuts
+BBnode 79 (now 82) done cutting: lowerbound 23254190.20 (49.19 seconds)
+LOWER BOUND: 23253403.829704   ACTIVE NODES: 22
+
+Task 61: Branching on node 54
+CClp_getweight ...
+BBnode 54 split into 83 (23253403.83) 84 (23253403.83) (0.68 seconds)
+LOWER BOUND: 23253403.829704   ACTIVE NODES: 23
+
+Task 62: Cutting on node 83
+Writing Pool: 96175 cuts
+BBnode 83 (now 85) done cutting: lowerbound 23253618.38 (21.00 seconds)
+LOWER BOUND: 23253403.829704   ACTIVE NODES: 23
+
+Task 63: Cutting on node 84
+Writing Pool: 98117 cuts
+BBnode 84 (now 86) done cutting: lowerbound 23253691.96 (29.71 seconds)
+LOWER BOUND: 23253503.833678   ACTIVE NODES: 23
+
+Task 64: Cutting on node 29
+Writing Pool: 102913 cuts
+BBnode 29 (now 87) done cutting: lowerbound 23265905.44 (54.49 seconds)
+LOWER BOUND: 23253591.646218   ACTIVE NODES: 23
+
+Task 65: Branching on node 76
+CClp_getweight ...
+BBnode 76 split into 88 (23253591.65) 89 (23253591.65) (0.67 seconds)
+LOWER BOUND: 23253591.646218   ACTIVE NODES: 24
+
+Task 66: Cutting on node 89
+Writing Pool: 104125 cuts
+BBnode 89 (now 90) done cutting: lowerbound 23253792.24 (19.99 seconds)
+LOWER BOUND: 23253591.646218   ACTIVE NODES: 24
+
+Task 67: Cutting on node 88
+Writing Pool: 105403 cuts
+BBnode 88 (now 91) done cutting: lowerbound 23253794.26 (22.39 seconds)
+LOWER BOUND: 23253618.377740   ACTIVE NODES: 24
+
+Task 68: Branching on node 85
+CClp_getweight ...
+BBnode 85 split into 92 (23253618.38) 93 (23253618.38) (0.80 seconds)
+LOWER BOUND: 23253618.377740   ACTIVE NODES: 25
+
+Task 69: Cutting on node 92
+Writing Pool: 106186 cuts
+BBnode 92 (now 94) done cutting: lowerbound 23253678.33 (12.49 seconds)
+LOWER BOUND: 23253618.377740   ACTIVE NODES: 25
+
+Task 70: Cutting on node 93
+Writing Pool: 107476 cuts
+BBnode 93 (now 95) done cutting: lowerbound 23253705.79 (23.05 seconds)
+LOWER BOUND: 23253678.331665   ACTIVE NODES: 25
+
+Task 71: Branching on node 94
+CClp_getweight ...
+BBnode 94 split into 96 (23253678.33) 97 (23253678.33) (0.68 seconds)
+LOWER BOUND: 23253678.331665   ACTIVE NODES: 26
+
+Task 72: Cutting on node 96
+Writing Pool: 108281 cuts
+BBnode 96 (now 98) done cutting: lowerbound 23253723.63 (11.48 seconds)
+LOWER BOUND: 23253678.331665   ACTIVE NODES: 26
+
+Task 73: Cutting on node 97
+Writing Pool: 109056 cuts
+BBnode 97 (now 99) done cutting: lowerbound 23253727.24 (12.87 seconds)
+LOWER BOUND: 23253683.476450   ACTIVE NODES: 26
+
+Task 74: Branching on node 72
+CClp_getweight ...
+BBnode 72 split into 100 (23253683.48) 101 (23253683.48) (0.74 seconds)
+LOWER BOUND: 23253683.476450   ACTIVE NODES: 27
+
+Task 75: Cutting on node 100
+Writing Pool: 109821 cuts
+BBnode 100 (now 102) done cutting: lowerbound 23253714.81 (11.01 seconds)
+LOWER BOUND: 23253683.476450   ACTIVE NODES: 27
+
+Task 76: Cutting on node 101
+New upperbound from x-heuristic: 23319910.00
+TOUR FOUND - upperbound is 23319910.00
+Writing Pool: 110507 cuts
+BBnode 101 (now 103) done cutting: lowerbound 23253714.28 (9.45 seconds)
+LOWER BOUND: 23253691.018545   ACTIVE NODES: 27
+
+Task 77: Branching on node 53
+CClp_getweight ...
+BBnode 53 split into 104 (23253691.02) 105 (23253691.02) (0.66 seconds)
+LOWER BOUND: 23253691.018545   ACTIVE NODES: 28
+
+Task 78: Cutting on node 105
+Writing Pool: 111706 cuts
+BBnode 105 (now 106) done cutting: lowerbound 23253864.84 (20.43 seconds)
+LOWER BOUND: 23253691.018545   ACTIVE NODES: 28
+
+Task 79: Cutting on node 104
+Writing Pool: 117932 cuts
+BBnode 104 (now 107) done cutting: lowerbound 23255671.84 (105.99 seconds)
+LOWER BOUND: 23253691.962408   ACTIVE NODES: 28
+
+Task 80: Branching on node 86
+CClp_getweight ...
+BBnode 86 split into 108 (23253691.96) 109 (23253691.96) (0.70 seconds)
+LOWER BOUND: 23253691.962408   ACTIVE NODES: 29
+
+Task 81: Cutting on node 109
+Writing Pool: 120076 cuts
+BBnode 109 (now 110) done cutting: lowerbound 23253975.69 (48.34 seconds)
+LOWER BOUND: 23253691.962408   ACTIVE NODES: 29
+
+Task 82: Cutting on node 108
+Writing Pool: 120837 cuts
+BBnode 108 (now 111) done cutting: lowerbound 23253734.50 (19.67 seconds)
+LOWER BOUND: 23253702.587445   ACTIVE NODES: 29
+
+Task 83: Branching on node 52
+CClp_getweight ...
+BBnode 52 split into 112 (23253938.97) 113 (23253758.67) (0.78 seconds)
+LOWER BOUND: 23253705.791418   ACTIVE NODES: 30
+
+Task 84: Branching on node 95
+CClp_getweight ...
+BBnode 95 split into 114 (23253705.79) 115 (23253705.79) (0.77 seconds)
+LOWER BOUND: 23253705.791418   ACTIVE NODES: 31
+
+Task 85: Cutting on node 114
+Writing Pool: 123104 cuts
+BBnode 114 (now 116) done cutting: lowerbound 23254112.52 (44.89 seconds)
+LOWER BOUND: 23253705.791418   ACTIVE NODES: 31
+
+Task 86: Cutting on node 115
+Writing Pool: 124842 cuts
+BBnode 115 (now 117) done cutting: lowerbound 23254036.22 (35.01 seconds)
+LOWER BOUND: 23253714.281663   ACTIVE NODES: 31
+
+Task 87: Branching on node 103
+CClp_getweight ...
+BBnode 103 split into 118 (23253714.28) 119 (23253714.28) (0.68 seconds)
+LOWER BOUND: 23253714.281663   ACTIVE NODES: 32
+
+Task 88: Cutting on node 119
+Writing Pool: 127534 cuts
+BBnode 119 (now 120) done cutting: lowerbound 23254443.77 (42.68 seconds)
+LOWER BOUND: 23253714.281663   ACTIVE NODES: 32
+
+Task 89: Cutting on node 118
+Writing Pool: 128293 cuts
+BBnode 118 (now 121) done cutting: lowerbound 23253743.47 (11.43 seconds)
+LOWER BOUND: 23253714.813956   ACTIVE NODES: 32
+
+Task 90: Branching on node 102
+CClp_getweight ...
+BBnode 102 split into 122 (23253714.81) 123 (23253714.81) (0.67 seconds)
+LOWER BOUND: 23253714.813956   ACTIVE NODES: 33
+
+Task 91: Cutting on node 123
+Writing Pool: 129049 cuts
+BBnode 123 (now 124) done cutting: lowerbound 23253749.86 (13.89 seconds)
+LOWER BOUND: 23253714.813956   ACTIVE NODES: 33
+
+Task 92: Cutting on node 122
+Writing Pool: 129746 cuts
+BBnode 122 (now 125) done cutting: lowerbound 23253744.49 (12.79 seconds)
+LOWER BOUND: 23253723.626425   ACTIVE NODES: 33
+
+Task 93: Branching on node 98
+CClp_getweight ...
+BBnode 98 split into 126 (23253723.63) 127 (23253723.63) (0.83 seconds)
+LOWER BOUND: 23253723.626425   ACTIVE NODES: 34
+
+Task 94: Cutting on node 127
+Writing Pool: 130582 cuts
+BBnode 127 (now 128) done cutting: lowerbound 23253737.59 (32.12 seconds)
+LOWER BOUND: 23253723.626425   ACTIVE NODES: 34
+
+Task 95: Cutting on node 126
+Writing Pool: 134793 cuts
+BBnode 126 (now 129) done cutting: lowerbound 23255359.61 (81.86 seconds)
+LOWER BOUND: 23253727.237125   ACTIVE NODES: 34
+
+Task 96: Branching on node 99
+CClp_getweight ...
+BBnode 99 split into 130 (23253727.24) 131 (23253727.24) (0.70 seconds)
+LOWER BOUND: 23253727.237125   ACTIVE NODES: 35
+
+Task 97: Cutting on node 131
+Writing Pool: 137141 cuts
+BBnode 131 (now 132) done cutting: lowerbound 23255321.22 (38.32 seconds)
+LOWER BOUND: 23253727.237125   ACTIVE NODES: 35
+
+Task 98: Cutting on node 130
+Writing Pool: 139020 cuts
+BBnode 130 (now 133) done cutting: lowerbound 23254539.23 (28.63 seconds)
+LOWER BOUND: 23253734.503934   ACTIVE NODES: 35
+
+Task 99: Branching on node 111
+CClp_getweight ...
+BBnode 111 split into 134 (23253822.50) 135 (23253776.50) (2.79 seconds)
+LOWER BOUND: 23253737.587021   ACTIVE NODES: 36
+
+Task 100: Branching on node 128
+CClp_getweight ...
+BBnode 128 split into 136 (23253737.59) 137 (23253737.59) (1.64 seconds)
+LOWER BOUND: 23253737.587021   ACTIVE NODES: 37
+
+Task 101: Cutting on node 137
+Writing Pool: 141810 cuts
+BBnode 137 (now 138) done cutting: lowerbound 23254929.13 (58.22 seconds)
+LOWER BOUND: 23253737.587021   ACTIVE NODES: 37
+
+Task 102: Cutting on node 136
+Writing Pool: 144279 cuts
+BBnode 136 (now 139) done cutting: lowerbound 23254930.93 (58.31 seconds)
+LOWER BOUND: 23253743.469138   ACTIVE NODES: 37
+
+Task 103: Branching on node 121
+CClp_getweight ...
+BBnode 121 split into 140 (23253743.47) 141 (23253743.47) (0.72 seconds)
+LOWER BOUND: 23253743.469138   ACTIVE NODES: 38
+
+Task 104: Cutting on node 141
+Writing Pool: 145723 cuts
+BBnode 141 (now 142) done cutting: lowerbound 23254167.58 (31.60 seconds)
+LOWER BOUND: 23253743.469138   ACTIVE NODES: 38
+
+Task 105: Cutting on node 140
+Writing Pool: 147170 cuts
+BBnode 140 (now 143) done cutting: lowerbound 23254173.31 (26.50 seconds)
+LOWER BOUND: 23253744.492054   ACTIVE NODES: 38
+
+Task 106: Branching on node 125
+CClp_getweight ...
+BBnode 125 split into 144 (23253744.49) 145 (23253744.49) (0.66 seconds)
+LOWER BOUND: 23253744.492054   ACTIVE NODES: 39
+
+Task 107: Cutting on node 145
+Writing Pool: 150730 cuts
+BBnode 145 (now 146) done cutting: lowerbound 23254553.73 (62.96 seconds)
+LOWER BOUND: 23253744.492054   ACTIVE NODES: 39
+
+Task 108: Cutting on node 144
+Writing Pool: 151480 cuts
+BBnode 144 (now 147) done cutting: lowerbound 23253760.78 (13.17 seconds)
+LOWER BOUND: 23253748.965740   ACTIVE NODES: 39
+
+Task 109: Branching on node 81
+CClp_getweight ...
+BBnode 81 split into 148 (23253748.97) 149 (23253748.97) (0.72 seconds)
+LOWER BOUND: 23253748.965740   ACTIVE NODES: 40
+
+Task 110: Cutting on node 149
+Writing Pool: 153213 cuts
+BBnode 149 (now 150) done cutting: lowerbound 23254401.56 (37.01 seconds)
+LOWER BOUND: 23253748.965740   ACTIVE NODES: 40
+
+Task 111: Cutting on node 148
+Writing Pool: 155318 cuts
+BBnode 148 (now 151) done cutting: lowerbound 23254576.60 (42.76 seconds)
+LOWER BOUND: 23253749.857869   ACTIVE NODES: 40
+
+Task 112: Branching on node 124
+CClp_getweight ...
+BBnode 124 split into 152 (23253749.86) 153 (23253749.86) (0.66 seconds)
+LOWER BOUND: 23253749.857869   ACTIVE NODES: 41
+
+Task 113: Cutting on node 153
+Writing Pool: 157309 cuts
+BBnode 153 (now 154) done cutting: lowerbound 23254415.09 (38.19 seconds)
+LOWER BOUND: 23253749.857869   ACTIVE NODES: 41
+
+Task 114: Cutting on node 152
+Writing Pool: 157965 cuts
+BBnode 152 (now 155) done cutting: lowerbound 23253771.75 (13.77 seconds)
+LOWER BOUND: 23253758.670778   ACTIVE NODES: 41
+
+Task 115: Cutting on node 113
+Writing Pool: 160672 cuts
+BBnode 113 (now 156) done cutting: lowerbound 23255269.16 (47.83 seconds)
+LOWER BOUND: 23253760.779747   ACTIVE NODES: 41
+
+Task 116: Branching on node 147
+CClp_getweight ...
+BBnode 147 split into 157 (23253769.17) 158 (23253760.78) (0.74 seconds)
+LOWER BOUND: 23253760.779747   ACTIVE NODES: 42
+
+Task 117: Cutting on node 158
+Writing Pool: 161857 cuts
+BBnode 158 (now 159) done cutting: lowerbound 23254296.39 (26.08 seconds)
+LOWER BOUND: 23253769.166843   ACTIVE NODES: 42
+
+Task 118: Cutting on node 157
+Writing Pool: 164343 cuts
+BBnode 157 (now 160) done cutting: lowerbound 23255315.84 (41.32 seconds)
+LOWER BOUND: 23253771.747449   ACTIVE NODES: 42
+
+Task 119: Branching on node 155
+CClp_getweight ...
+BBnode 155 split into 161 (23253771.75) 162 (23253771.75) (0.68 seconds)
+LOWER BOUND: 23253771.747449   ACTIVE NODES: 43
+
+Task 120: Cutting on node 161
+Writing Pool: 165596 cuts
+BBnode 161 (now 163) done cutting: lowerbound 23254322.87 (21.59 seconds)
+LOWER BOUND: 23253771.747449   ACTIVE NODES: 43
+
+Task 121: Cutting on node 162
+Writing Pool: 167423 cuts
+BBnode 162 (now 164) done cutting: lowerbound 23254504.47 (33.08 seconds)
+LOWER BOUND: 23253776.503934   ACTIVE NODES: 43
+
+Task 122: Cutting on node 135
+Writing Pool: 169393 cuts
+BBnode 135 (now 165) done cutting: lowerbound 23255160.77 (48.59 seconds)
+LOWER BOUND: 23253792.236711   ACTIVE NODES: 43
+
+Task 123: Branching on node 90
+CClp_getweight ...
+BBnode 90 split into 166 (23253792.24) 167 (23253792.24) (0.70 seconds)
+LOWER BOUND: 23253792.236711   ACTIVE NODES: 44
+
+Task 124: Cutting on node 166
+Writing Pool: 170111 cuts
+BBnode 166 (now 168) done cutting: lowerbound 23253835.63 (14.38 seconds)
+LOWER BOUND: 23253792.236711   ACTIVE NODES: 44
+
+Task 125: Cutting on node 167
+Writing Pool: 170841 cuts
+BBnode 167 (now 169) done cutting: lowerbound 23253844.27 (13.54 seconds)
+LOWER BOUND: 23253794.262370   ACTIVE NODES: 44
+
+Task 126: Branching on node 91
+CClp_getweight ...
+BBnode 91 split into 170 (23253794.26) 171 (23253794.26) (0.92 seconds)
+LOWER BOUND: 23253794.262370   ACTIVE NODES: 45
+
+Task 127: Cutting on node 171
+Writing Pool: 173511 cuts
+BBnode 171 (now 172) done cutting: lowerbound 23254443.64 (48.51 seconds)
+LOWER BOUND: 23253794.262370   ACTIVE NODES: 45
+
+Task 128: Cutting on node 170
+Writing Pool: 174973 cuts
+BBnode 170 (now 173) done cutting: lowerbound 23254027.82 (29.79 seconds)
+LOWER BOUND: 23253822.503934   ACTIVE NODES: 45
+
+Task 129: Cutting on node 134
+Writing Pool: 175895 cuts
+BBnode 134 (now 174) done cutting: lowerbound 23254958.26 (28.46 seconds)
+LOWER BOUND: 23253824.718332   ACTIVE NODES: 45
+
+Task 130: Branching on node 57
+CClp_getweight ...
+BBnode 57 split into 175 (23253891.09) 176 (23253968.70) (0.71 seconds)
+LOWER BOUND: 23253835.626516   ACTIVE NODES: 46
+
+Task 131: Branching on node 168
+CClp_getweight ...
+BBnode 168 split into 177 (23253835.63) 178 (23253835.63) (0.71 seconds)
+LOWER BOUND: 23253835.626516   ACTIVE NODES: 47
+
+Task 132: Cutting on node 178
+Writing Pool: 176583 cuts
+BBnode 178 (now 179) done cutting: lowerbound 23253849.90 (10.99 seconds)
+LOWER BOUND: 23253835.626516   ACTIVE NODES: 47
+
+Task 133: Cutting on node 177
+Writing Pool: 177180 cuts
+BBnode 177 (now 180) done cutting: lowerbound 23253850.83 (8.78 seconds)
+LOWER BOUND: 23253844.266856   ACTIVE NODES: 47
+
+Task 134: Branching on node 169
+CClp_getweight ...
+BBnode 169 split into 181 (23253844.27) 182 (23253844.27) (0.73 seconds)
+LOWER BOUND: 23253844.266856   ACTIVE NODES: 48
+
+Task 135: Cutting on node 181
+Writing Pool: 178725 cuts
+BBnode 181 (now 183) done cutting: lowerbound 23253978.39 (30.21 seconds)
+LOWER BOUND: 23253844.266856   ACTIVE NODES: 48
+
+Task 136: Cutting on node 182
+Writing Pool: 180588 cuts
+BBnode 182 (now 184) done cutting: lowerbound 23254077.42 (48.64 seconds)
+LOWER BOUND: 23253849.904735   ACTIVE NODES: 48
+
+Task 137: Branching on node 179
+CClp_getweight ...
+BBnode 179 split into 185 (23253849.90) 186 (23253849.90) (0.89 seconds)
+LOWER BOUND: 23253849.904734   ACTIVE NODES: 49
+
+Task 138: Cutting on node 186
+Writing Pool: 181347 cuts
+BBnode 186 (now 187) done cutting: lowerbound 23253860.59 (14.19 seconds)
+LOWER BOUND: 23253849.904735   ACTIVE NODES: 49
+
+Task 139: Cutting on node 185
+Writing Pool: 182193 cuts
+BBnode 185 (now 188) done cutting: lowerbound 23253882.74 (20.48 seconds)
+LOWER BOUND: 23253850.831677   ACTIVE NODES: 49
+
+Task 140: Branching on node 180
+CClp_getweight ...
+BBnode 180 split into 189 (23253850.83) 190 (23253850.83) (0.84 seconds)
+LOWER BOUND: 23253850.831677   ACTIVE NODES: 50
+
+Task 141: Cutting on node 190
+Writing Pool: 183581 cuts
+BBnode 190 (now 191) done cutting: lowerbound 23253943.47 (29.92 seconds)
+LOWER BOUND: 23253850.831677   ACTIVE NODES: 50
+
+Task 142: Cutting on node 189
+Writing Pool: 184889 cuts
+BBnode 189 (now 192) done cutting: lowerbound 23253947.00 (29.00 seconds)
+LOWER BOUND: 23253860.592711   ACTIVE NODES: 50
+
+Task 143: Branching on node 187
+CClp_getweight ...
+BBnode 187 split into 193 (23253860.59) 194 (23253860.59) (0.77 seconds)
+LOWER BOUND: 23253860.592711   ACTIVE NODES: 51
+
+Task 144: Cutting on node 193
+Writing Pool: 186197 cuts
+BBnode 193 (now 195) done cutting: lowerbound 23253955.12 (24.70 seconds)
+LOWER BOUND: 23253860.592711   ACTIVE NODES: 51
+
+Task 145: Cutting on node 194
+Writing Pool: 187680 cuts
+BBnode 194 (now 196) done cutting: lowerbound 23253954.73 (33.51 seconds)
+LOWER BOUND: 23253864.840658   ACTIVE NODES: 51
+
+Task 146: Branching on node 106
+CClp_getweight ...
+BBnode 106 split into 197 (23253864.84) 198 (23253864.84) (0.71 seconds)
+LOWER BOUND: 23253864.840658   ACTIVE NODES: 52
+
+Task 147: Cutting on node 198
+Writing Pool: 188885 cuts
+BBnode 198 (now 199) done cutting: lowerbound 23254662.47 (16.15 seconds)
+LOWER BOUND: 23253864.840658   ACTIVE NODES: 52
+
+Task 148: Cutting on node 197
+Writing Pool: 190430 cuts
+BBnode 197 (now 200) done cutting: lowerbound 23254797.16 (28.29 seconds)
+LOWER BOUND: 23253882.739881   ACTIVE NODES: 52
+
+Task 149: Branching on node 188
+CClp_getweight ...
+BBnode 188 split into 201 (23253882.74) 202 (23253882.74) (0.74 seconds)
+LOWER BOUND: 23253882.739881   ACTIVE NODES: 53
+
+Task 150: Cutting on node 201
+Writing Pool: 191199 cuts
+BBnode 201 (now 203) done cutting: lowerbound 23253902.63 (16.68 seconds)
+LOWER BOUND: 23253882.739881   ACTIVE NODES: 53
+
+Task 151: Cutting on node 202
+Writing Pool: 191933 cuts
+BBnode 202 (now 204) done cutting: lowerbound 23253886.18 (23.70 seconds)
+LOWER BOUND: 23253886.184767   ACTIVE NODES: 53
+
+Task 152: Branching on node 204
+CClp_getweight ...
+BBnode 204 split into 205 (23253886.18) 206 (23253886.18) (1.39 seconds)
+LOWER BOUND: 23253886.184767   ACTIVE NODES: 54
+
+Task 153: Cutting on node 206
+Writing Pool: 192701 cuts
+BBnode 206 (now 207) done cutting: lowerbound 23253910.33 (30.14 seconds)
+LOWER BOUND: 23253886.184767   ACTIVE NODES: 54
+
+Task 154: Cutting on node 205
+Writing Pool: 193423 cuts
+BBnode 205 (now 208) done cutting: lowerbound 23253907.89 (25.91 seconds)
+Total number of nodes in search tree: 107
+Optimal tour: 23319910
+Total Time to solve TSP: 3014.49

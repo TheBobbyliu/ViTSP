@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parent
 LKH_DIR = ROOT / "LKH_runs_solutions"
-LLM_DIR = ROOT / "experiments" / "LLM_TSP_exp"
+LLM_DIR = ROOT / "experiments" / "LLM_TSP_exp-gpt4-2"
 OPT_DIR = ROOT / "instances" / "opt"
 
 
@@ -132,7 +132,7 @@ def draw_opt_curve(
         llm_time,
         llm_gap,
         color="red",
-        label="ViTSP",
+        label="ViTSP-GPT4",
         drawstyle="steps-post",
     )
     ax.plot(

@@ -107,7 +107,7 @@ if __name__ == '__main__':
     file_parser = FileParser()
     solution_plotter = SolutionPlot()
 
-    fname = './instances/tsplib/d1291.tsp'
+    fname = sys.argv[1]
     # fname = './instances/tsplib/a280.tsp'
 
     instance_info = file_parser.parse_instance_from_file(fname)
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     )
 
     concorde_model = Concorde(nodes=list(nodes.keys()), coordinates=coordinates)
-    concorde_model.optimize(timelimit=100, verbose=False)
+    concorde_model.optimize(timelimit=int(sys.argv[2]), verbose=False)
     current_route = concorde_model.get_tsp_route()
     current_obj = concorde_model.get_objective_value()
 

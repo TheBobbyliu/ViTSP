@@ -542,7 +542,7 @@ if __name__ == "__main__":
     parser.add_argument('--max_iterations', type=int, default=5,
     # parser.add_argument('--max_iterations', type=int, default=1,
                         help='Maximum number of iterations for optimization')
-    parser.add_argument('--total_time_budget', type=float, default=3000,
+    parser.add_argument('--total_time_budget', type=float, default=5000,
     # parser.add_argument('--total_time_budget', type=float, default=3000,
                         help='Wall time in seconds')
     parser.add_argument('--max_workers', type=int, default=4,
@@ -598,23 +598,23 @@ if __name__ == "__main__":
     file_path = args.instance_path
     tsp_files = [
         # 'a280.tsp',
-        'dsj1000.tsp',
+        # 'dsj1000.tsp',
         # 'pr1002.tsp',
         # 'u1060.tsp',
         # 'vm1084.tsp',
         # 'pcb1173.tsp',
-        'd1291.tsp',
+        # 'd1291.tsp',
         # 'rl1304.tsp',
         # 'rl1323.tsp',
         # 'nrw1379.tsp',
         # 'fl1400.tsp',
         # 'u1432.tsp',
-        'fl1577.tsp',
+        # 'fl1577.tsp',
         # 'd1655.tsp',
         # 'vm1748.tsp',
         # 'u1817.tsp',
         # 'rl1889.tsp',
-        'd2103.tsp',
+        # 'd2103.tsp',
         # 'u2152.tsp',
         # 'u2319.tsp',
         # 'pr2392.tsp',
@@ -627,19 +627,19 @@ if __name__ == "__main__":
         # 'rl11849.tsp',
         # 'usa13509.tsp',
         # 'brd14051.tsp',
-        'd15112.tsp',
+        # 'd15112.tsp',
         # 'd18512.tsp',
         # 'pla33810.tsp',
         # 'pla85900.tsp',
     ]
 
     for file in tsp_files:
-        if file in ['dsj1000.tsp', 'd1291.tsp', 'fl1577.tsp']:
-            args.total_time_budget = 500
-        if file in ['d2103.tsp']:
-            args.total_time_budget = 1000
-        if file in ['rl5934.tsp', 'd15112.tsp']:
-            args.total_time_budget = 3000
+        # if file in ['dsj1000.tsp', 'd1291.tsp', 'fl1577.tsp']:
+        #     args.total_time_budget = 500
+        # if file in ['d2103.tsp']:
+        #     args.total_time_budget = 1000
+        # if file in ['rl5934.tsp', 'd15112.tsp']:
+        #     args.total_time_budget = 3000
         print(file, args.total_time_budget)
         args.instance_path = f'{file_path}/{file}'
         main(args)

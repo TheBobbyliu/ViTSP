@@ -1,0 +1,104 @@
+[WARNING] CuPy not found. Falling back to NumPy.
+Problem Name: Pseudo_TSP_Instance
+Problem Type: TSP
+Number of Nodes: 2103
+Rounded Euclidean Norm (CC_EUCLIDEAN)
+CCtsp_solve_dat ...
+Finding a good tour for compression ...
+linkern ...
+Starting Cycle: 92091
+   0 Steps   Best: 82071   0.00 seconds
+   3 Steps   Best: 82060   0.00 seconds
+   8 Steps   Best: 82054   0.01 seconds
+  11 Steps   Best: 82048   0.01 seconds
+  15 Steps   Best: 82022   0.01 seconds
+  17 Steps   Best: 82007   0.01 seconds
+  21 Steps   Best: 81959   0.01 seconds
+  30 Steps   Best: 81947   0.01 seconds
+  33 Steps   Best: 81936   0.01 seconds
+  35 Steps   Best: 81918   0.01 seconds
+  36 Steps   Best: 81870   0.01 seconds
+  39 Steps   Best: 81866   0.01 seconds
+  42 Steps   Best: 81862   0.01 seconds
+  43 Steps   Best: 81821   0.01 seconds
+  50 Steps   Best: 81801   0.01 seconds
+  60 Steps   Best: 81792   0.02 seconds
+  63 Steps   Best: 81790   0.02 seconds
+  66 Steps   Best: 81786   0.02 seconds
+  91 Steps   Best: 81764   0.02 seconds
+ 104 Steps   Best: 81763   0.02 seconds
+ 118 Steps   Best: 81762   0.03 seconds
+ 135 Steps   Best: 81758   0.03 seconds
+ 146 Steps   Best: 81684   0.03 seconds
+ 235 Steps   Best: 81682   0.05 seconds
+ 500 Total Steps.
+Best cycle length: 81682
+Lin-Kernighan Running Time: 0.09
+LK Initial Run: 81682.0
+LK Run 0: 82050.0
+LK Run from best tour: 81633.0
+Time to find compression tour: 0.37 (seconds)
+Set initial upperbound to 81633 (from tour)
+  LP Value  1: 77283.500000  (0.11 seconds)
+  LP Value  2: 79046.458333  (0.32 seconds)
+  LP Value  3: 79300.750148  (0.57 seconds)
+  LP Value  4: 79507.063408  (0.94 seconds)
+  LP Value  5: 79562.473639  (1.37 seconds)
+  LP Value  6: 79607.414210  (2.25 seconds)
+  LP Value  7: 79650.600986  (4.23 seconds)
+  LP Value  8: 79682.161567  (7.91 seconds)
+  LP Value  9: 79712.661744  (12.73 seconds)
+  LP Value 10: 79733.571071  (19.60 seconds)
+  LP Value 11: 79754.732805  (29.72 seconds)
+  LP Value 12: 79771.504975  (42.43 seconds)
+  LP Value 13: 79789.633919  (61.73 seconds)
+  LP Value 14: 79803.586636  (84.92 seconds)
+  LP Value 15: 79819.780318  (111.48 seconds)
+  LP Value 16: 79833.563269  (142.39 seconds)
+  LP Value 17: 79845.681069  (179.42 seconds)
+  LP Value 18: 79860.488766  (222.88 seconds)
+  LP Value 19: 79872.839503  (265.60 seconds)
+  LP Value 20: 79884.020002  (315.25 seconds)
+  LP Value 21: 79898.210537  (382.30 seconds)
+  LP Value 22: 79913.240519  (454.70 seconds)
+  LP Value 23: 79925.839471  (530.38 seconds)
+  LP Value 24: 79936.342266  (608.97 seconds)
+  LP Value 25: 79946.984105  (707.70 seconds)
+New lower bound: 79946.717564
+  LP Value  1: 79959.891878  (847.15 seconds)
+  LP Value  2: 79972.486451  (981.39 seconds)
+  LP Value  3: 79983.989375  (1108.06 seconds)
+  LP Value  4: 79994.530722  (1220.05 seconds)
+  LP Value  5: 80006.222813  (1340.35 seconds)
+  LP Value  6: 80015.256962  (1458.79 seconds)
+  LP Value  7: 80024.962778  (1587.38 seconds)
+  LP Value  8: 80034.962867  (1730.98 seconds)
+  LP Value  9: 80045.791158  (1882.14 seconds)
+  LP Value 10: 80055.394119  (2046.36 seconds)
+  LP Value 11: 80063.006347  (2275.46 seconds)
+  LP Value 12: 80070.829749  (2502.87 seconds)
+  LP Value 13: 80077.475883  (2733.33 seconds)
+  LP Value 14: 80084.363060  (3036.21 seconds)
+  LP Value 15: 80092.660285  (3301.96 seconds)
+  LP Value 16: 80099.101385  (3484.86 seconds)
+  LP Value 17: 80103.458856  (3629.59 seconds)
+  LP Value 18: 80107.068500  (3763.59 seconds)
+  LP Value 19: 80109.954729  (3883.67 seconds)
+  LP Value 20: 80114.274023  (4045.45 seconds)
+  LP Value 21: 80121.071925  (4197.26 seconds)
+  LP Value 22: 80127.252549  (4402.16 seconds)
+  LP Value 23: 80132.034808  (4551.32 seconds)
+  LP Value 24: 80134.586181  (4653.98 seconds)
+  LP Value 25: 80138.335680  (4778.72 seconds)
+New lower bound: 80138.123748
+  LP Value  1: 80140.851255  (4908.03 seconds)
+  LP Value  2: 80143.311906  (5030.17 seconds)
+  LP Value  3: 80145.087231  (5150.33 seconds)
+  LP Value  4: 80146.605886  (5308.13 seconds)
+New lower bound: 80146.605886
+Upperbound from x-heuristic: 80764.00
+Exact lower bound: 80146.605878
+DIFF: 0.000008
+Hit time bound
+Did not succeed in finding optimal tour
+Total Time to solve TSP: 5316.11

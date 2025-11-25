@@ -23,7 +23,7 @@ def main(args):
         if file.startswith('.') or not file.endswith('.tsp'):
             continue
         task = file.split("/")[-1].split(".tsp")[0]
-        if task not in ['d1291', 'rl5934', 'brd14051', 'd15112']:
+        if task not in ['d1291']: 
             continue
 
         dim = file_parser.get_dim_from_filename(file)
@@ -50,8 +50,7 @@ def main(args):
 
         n_nodes = len(nodes)
         trial_increments = list(range(n_nodes, n_nodes + 1, n_nodes)) # n_nodes is the default setting, incrementing with the num of nodes
-        run_increments = list(range(1200, args.max_runs + 1, args.run_step)) # 10 is the default setting
-
+        run_increments = list(range(10, args.max_runs + 1, args.run_step)) # 10 is the default setting
         result_file_path = (
             f'../LKH_runs_solutions/'
             f'{file.split(".")[0]}_param_sweep_{args.solution_model}_time_limit_{args.time_limit_per_run}_max_trails_{args.max_trials}_max_runs_{args.max_runs}.csv'
@@ -93,6 +92,9 @@ def main(args):
                     writer.writerow([file.split('.')[0], n_nodes, max_trials, runs, latency, current_obj])
 
                     print(f"{file}: Trials={max_trials}, Runs={runs}, Obj={current_obj}, Time={latency:.2f}s")
+                    if latency > 2000:
+                        print("time limit reached, break")
+                        break
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Traveling Salesman Problem LKH Parameter Sweep")
